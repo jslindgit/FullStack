@@ -1,29 +1,52 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import serverProvider from './services/server_provider'
 
 const App = () => {
 	const [persons, setPersons] = useState([
-		{ name: 'Arto Hellas', number: '040-123456' },
-    	{ name: 'Ada Lovelace', number: '39-44-5323523' },
-    	{ name: 'Dan Abramov', number: '12-43-234345' },
-    	{ name: 'Mary Poppendieck', number: '39-23-6423122' }
+		//{ name: 'Arto Hellas', number: '040-123456' },
+    	//{ name: 'Ada Lovelace', number: '39-44-5323523' },
+    	//{ name: 'Dan Abramov', number: '12-43-234345' },
+    	//{ name: 'Mary Poppendieck', number: '39-23-6423122' }
 	]) 
 	const [filter, setFilter] = useState('')
 	const [newName, setNewName] = useState('')
 	const [newNum, setNewNum] = useState('')
 
+	useEffect(() => {
+		getPersons()
+	}, [])
+
 	const addPerson = (event) => {
 		event.preventDefault()
 		if (newName.trim().length > 0 && newNum.trim().length > 0) {
-			if (persons.find(p => p.name === newName) == undefined) {
-				const nameObj = { name: newName, number: newNum }
-				setPersons(persons.concat(nameObj))
-				setNewName('')
-				setNewNum('')
+			const newPerson = { name: newName, number: newNum }
+			const existing = persons.find(p => p.name === newPerson.name)
+			if (existing === undefined) {				
+				serverProvider
+					.postNew(newPerson)
+						.then(returnedPerson => {
+							setPersons(persons.concat(returnedPerson))							
+						}
+					)
 			}
 			else {
-				alert(`${newName} is already added to the phonebook.`)
+				updatePerson(existing.id, newPerson)
 			}
+			setNewName('')
+			setNewNum('')
 		}
+	}
+
+	const delPerson = (person) => {
+		if (window.confirm(`Delete ${person.name}?`)) {
+			serverProvider.deleteItem(person.id)			
+		}
+		getPersons()
+	}
+
+	const getPersons = () => {
+		serverProvider
+			.getAll().then(initPersons => setPersons(initPersons))
 	}
 
 	const handleFilterChange = (event) => {
@@ -38,6 +61,13 @@ const App = () => {
 		setNewNum(event.target.value)
 	}
 
+	const updatePerson = (existingId, newPerson) => {
+		if (window.confirm(`${newPerson.name} is already added to the phonebook. Replace the old number with a new one?`)) {
+			serverProvider.update(existingId, newPerson)			
+		}		
+		getPersons()
+	}
+
 	return (
 		<div>
 			<h2>Phonebook</h2>
@@ -46,7 +76,7 @@ const App = () => {
 			<PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
 				newNum={newNum} handleNumChange={handleNumChange} />
 			<h2>Numbers</h2>
-			<Persons persons={persons} filter={filter}/>
+			<Persons persons={persons} filter={filter} delPerson={delPerson}/>
 		</div>
 	)
 }
@@ -69,12 +99,12 @@ const PersonForm = ({ addPerson, newName, handleNameChange, newNum, handleNumCha
 	</form>
 )
 
-const Person = ({ person }) => (
-	<li>{person.name} {person.number}</li>
+const Person = ({ person, delPerson }) => (
+	<li>{person.name} {person.number} <button onClick={() => delPerson(person)}>del</button></li>
 )
 
-const Persons = ({ persons, filter }) => (
-	<ul>{persons.filter(x => x.name.toLowerCase().includes(filter.toLowerCase())).map(p => <Person key={p.name} person={p} />)}</ul>
+const Persons = ({ persons, filter, delPerson }) => (
+	<ul>{persons.filter(x => x.name.toLowerCase().includes(filter.toLowerCase())).map(p => <Person key={p.id} person={p} delPerson={delPerson} />)}</ul>
 )
 
 export default App
