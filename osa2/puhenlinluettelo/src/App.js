@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import serverProvider from './services/server_provider'
+import './index.css'
 
 const App = () => {
 	const [persons, setPersons] = useState([
@@ -11,6 +12,8 @@ const App = () => {
 	const [filter, setFilter] = useState('')
 	const [newName, setNewName] = useState('')
 	const [newNum, setNewNum] = useState('')
+	const [notification, setNotification] = useState(null)
+	const [error, setError] = useState(null)
 
 	useEffect(() => {
 		getPersons()
@@ -26,11 +29,13 @@ const App = () => {
 					.postNew(newPerson)
 						.then(returnedPerson => {
 							setPersons(persons.concat(returnedPerson))							
+							setNotification(`Added ${returnedPerson.name}`)
+							setTimeout(() => setNotification(null), 5000)
 						}
-					)
+					)				
 			}
 			else {
-				updatePerson(existing.id, newPerson)
+				updatePerson(existing.id, { ...existing, number: newNum })
 			}
 			setNewName('')
 			setNewNum('')
@@ -39,14 +44,15 @@ const App = () => {
 
 	const delPerson = (person) => {
 		if (window.confirm(`Delete ${person.name}?`)) {
-			serverProvider.deleteItem(person.id)			
+			serverProvider
+				.deleteItem(person.id)			
+				.then(response => setPersons(response.map(p => p)))
 		}
-		getPersons()
 	}
 
 	const getPersons = () => {
 		serverProvider
-			.getAll().then(initPersons => setPersons(initPersons))
+			.getAll().then(initPersons => setPersons([ ...initPersons]))
 	}
 
 	const handleFilterChange = (event) => {
@@ -61,21 +67,25 @@ const App = () => {
 		setNewNum(event.target.value)
 	}
 
-	const updatePerson = (existingId, newPerson) => {
+	const updatePerson = (id, newPerson) => {
 		if (window.confirm(`${newPerson.name} is already added to the phonebook. Replace the old number with a new one?`)) {
-			serverProvider.update(existingId, newPerson)			
-		}		
-		getPersons()
+			serverProvider
+				.update(id, newPerson)
+				.then(updatedPerson => setPersons(persons.map(p => p.id !== id ? p : updatedPerson)))
+				.catch(error => setError(`${newPerson.name} has already been removed from the server.`))
+		}
 	}
 
 	return (
 		<div>
-			<h2>Phonebook</h2>
+			<h1>Phonebook</h1>
+			<Notification message={notification} isError={false} />
+			<Notification message={error} isError={true} />
 			<Filter filter={filter} handleFilterChange={handleFilterChange} />
-			<h2>Add new</h2>
+			<h1>Add new</h1>
 			<PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
 				newNum={newNum} handleNumChange={handleNumChange} />
-			<h2>Numbers</h2>
+			<h1>Numbers</h1>
 			<Persons persons={persons} filter={filter} delPerson={delPerson}/>
 		</div>
 	)
@@ -84,6 +94,14 @@ const App = () => {
 const Filter = ({ filter, handleFilterChange }) => (
 	<div>filter names: <input value={filter} onChange={handleFilterChange} /></div>
 )
+
+const Notification = ({ message, isError }) => {
+	return message === null ? null : (
+		<div className={isError ? 'error' : 'notification'}>
+			{message}
+		</div>
+	)
+}
 
 const PersonForm = ({ addPerson, newName, handleNameChange, newNum, handleNumChange }) => (
 	<form onSubmit={addPerson}>
@@ -100,7 +118,7 @@ const PersonForm = ({ addPerson, newName, handleNameChange, newNum, handleNumCha
 )
 
 const Person = ({ person, delPerson }) => (
-	<li>{person.name} {person.number} <button onClick={() => delPerson(person)}>del</button></li>
+	<li className='person'>{person.name} {person.number} <button onClick={() => delPerson(person)}>del</button></li>
 )
 
 const Persons = ({ persons, filter, delPerson }) => (

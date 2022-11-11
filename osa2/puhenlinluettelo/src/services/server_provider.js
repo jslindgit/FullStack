@@ -3,6 +3,7 @@ const baseUrl = 'http://localhost:3001/persons'
 
 const deleteItem = (id) => {
 	axios.delete(`${baseUrl}/${id}`)
+	return getAll()
 }
 
 const getAll = () => {
