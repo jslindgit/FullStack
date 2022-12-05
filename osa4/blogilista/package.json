@@ -1,0 +1,29 @@
+{
+	"name": "blogilista",
+	"version": "1.0.0",
+	"description": "fullstack osa 4",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"dev": "nodemon index.js",
+		"lint": "eslint .",
+		"test": "jest --verbose"
+	},
+		"author": "Joonas Lindstedt",
+		"license": "ISC",
+		"dependencies": {
+		"axios": "^1.2.0",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.3",
+		"eslint": "^8.28.0",
+		"express": "^4.18.2",
+		"mongoose": "^6.7.4",
+		"nodemon": "^2.0.20"
+	},
+		"devDependencies": {
+		"jest": "^29.3.1"
+	},
+		"jest": {
+		"testEnvironment": "node"
+	}
+}
