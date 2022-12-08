@@ -108,6 +108,33 @@ test('blog contains property \'id\'', async () => {
 	expect(response.body.id).toBeDefined()
 })
 
+test('a blog can be deleted', async () => {
+	const response = await api.get('/api/blogs')
+	const blogs = response.body
+	const idToDel = blogs[0].id
+
+	await api
+		.del('/api/blogs/' + idToDel)
+		.expect(204)
+})
+
+test('a blog can be updated', async () => {
+	const blog = {
+		title: 'updated blog',
+		author: 'updater test',
+		url: 'www.updated.com',
+		likes: '111'
+	}
+
+	const response = await api.get('/api/blogs')
+	const blogs = response.body
+	const idToUpdate = blogs[0].id
+
+	await api
+		.put('/api/blogs/' + idToUpdate)
+		.expect(200)
+})
+
 afterAll(() => {
 	mongoose.connection.close()
 })

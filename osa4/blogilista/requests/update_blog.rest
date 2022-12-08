@@ -1,0 +1,10 @@
+// 6390abdf5218ae7611ba8f38
+PUT http://localhost:3003/api/blogs/6390abdf5218ae7611ba8f38
+Content-Type: application/json
+
+{
+	"title": "Toinen testiblogi",
+	"author": "Tiina Testaaja",
+	"url": "https://www.testiblogi2.fi",
+	"likes": 458
+}
