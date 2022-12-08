@@ -5,22 +5,33 @@ const Blog = require('../models/blog')
 	res.send('Blogilista backend')
 })*/
 
-blogsRouter.get('/', (request, response) => {
-	Blog
-		.find({})
-		.then(blogs => {
-			response.json(blogs)
-		})
+blogsRouter.get('/', async (request, response) => {
+	const blogs = await Blog.find({})
+	response.json(blogs)
 })
 
-blogsRouter.post('/', (request, response) => {
-	const blog = new Blog(request.body)
+blogsRouter.post('/', async (request, response, next) => {
+	const body = request.body
 
-	blog
-		.save()
-		.then(result => {
-			response.status(201).json(result)
+	if (!body.title || !body.url) {
+		response.status(400).json({ error: 'title or url missing' })
+	}
+	else {
+		const blog = new Blog({
+			title: body.title,
+			author: body.author,
+			url: body.url,
+			likes: body.likes || 0
 		})
+
+		try {
+			const savedBlog = await blog.save()
+			response.status(201).json(savedBlog)
+		}
+		catch(exception) {
+			next(exception)
+		}
+	}
 })
 
 module.exports = blogsRouter
