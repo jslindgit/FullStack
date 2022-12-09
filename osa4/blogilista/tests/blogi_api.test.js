@@ -132,6 +132,7 @@ test('a blog can be updated', async () => {
 
 	await api
 		.put('/api/blogs/' + idToUpdate)
+		.send(blog)
 		.expect(200)
 })
 
