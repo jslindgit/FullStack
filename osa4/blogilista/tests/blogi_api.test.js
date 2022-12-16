@@ -13,6 +13,10 @@ beforeEach(async () => {
 	await blogObject.save()
 })
 
+afterAll(() => {
+	mongoose.connection.close()
+})
+
 test('blogs are returned as json', async () => {
 	await api
 		.get('/api/blogs')
@@ -134,8 +138,4 @@ test('a blog can be updated', async () => {
 		.put('/api/blogs/' + idToUpdate)
 		.send(blog)
 		.expect(200)
-})
-
-afterAll(() => {
-	mongoose.connection.close()
 })

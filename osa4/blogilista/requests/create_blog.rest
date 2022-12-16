@@ -1,9 +1,0 @@
-POST http://localhost:3003/api/blogs
-Content-Type: application/json
-
-{
-	//"title": "Testiblogi 5",
-	"author": "Tiina Testaaja",
-	"url": "https://www.testiblogi2.fi",
-	"likes": 358
-}

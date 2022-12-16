@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+	"username": "testuser2",
+	"password": "trustno2"
+}
+
+// teppo/trustno1/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlcHBvIiwiaWQiOiI2Mzk5ZDUxNjk0MWIwM2VjYzhjZDg5YmUiLCJpYXQiOjE2NzEwMzA1NTN9.PWFkpn9LcW-2apFv7qK1vgy2bqR7C-b3n77t5LXk3bo
+// testuser2/trustno2/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMiIsImlkIjoiNjM5OWQyNWM1YTEyNWM0MmFjYjg5MzVkIiwiaWF0IjoxNjcxMTE1MTkwfQ.TeDBu_k6XM08pq5CJotdbu4ZhzLlcHKvqakGoFlGH18
