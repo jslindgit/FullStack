@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react'
+
+// Components:
 import Blog from './components/Blog'
-import Notification from './components/Notification'
 import ErrorMessage from './components/ErrorMessage'
+import LoginForm from './components/LoginForm'
+import Notification from './components/Notification'
+
+// Services:
 import blogService from './services/blogs'
 import loginService from './services/login'
+
 import './index.css'
 
 const App = () => {
@@ -87,35 +93,6 @@ const App = () => {
 		}
 	}
 
-	const loginForm = () => (
-		<div>
-			<h2>Log in to application</h2>
-			<form onSubmit={handleLogin}>
-				<div>
-					username &nbsp; 
-					<input
-						type="text"
-						value={username}
-						name="Username"
-						onChange={({ target }) => setUserName(target.value)}
-					/>
-				</div>
-				<br />
-				<div>
-					password &nbsp;
-					<input
-						type="password"
-						value={password}
-						name="Password"
-						onChange={({ target }) => setPassword(target.value)}
-					/>
-				</div>
-				<br />
-				<button type="submit">login</button>
-			</form>
-		</div>
-	)
-
 	const logoutForm = () => (
 		<>
 			<form onSubmit={handleLogout}>
@@ -179,8 +156,14 @@ const App = () => {
 			<ErrorMessage message={errorMessage} />
 
 			{user === null ?
-				loginForm() :
-				listBlogs()
+				<LoginForm
+					username={username}
+					password={password}
+					handleUsernameChange={({ target }) => setUserName(target.value)}
+					handlePasswordChange={({ target }) => setPassword(target.value)}
+					handleSubmit={handleLogin}
+				/>
+				: listBlogs()
 			}
 		</div>
 	)
