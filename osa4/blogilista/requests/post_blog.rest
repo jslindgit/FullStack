@@ -8,5 +8,6 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
 {
 	"title": "Tiinan Testiblogi",
 	"url": "https://www.testi.com",
+	"author": "Tiina T",
 	"likes": 612
 }
