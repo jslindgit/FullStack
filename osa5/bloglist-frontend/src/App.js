@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
 // Components:
 import Blog from './components/Blog'
@@ -17,13 +17,13 @@ import './index.css'
 const App = () => {
 	const [user, setUser] = useState(null)
 	const [blogs, setBlogs] = useState([])
-	const [errorMessage, setErrorMessage] = useState(null)	
+	const [errorMessage, setErrorMessage] = useState(null)
 	const [notification, setNotification] = useState(null)
-			
+
 	useEffect(() => {
-	blogService.getAll().then(blogs =>
-		setBlogs( blogs )
-	)  
+		blogService.getAll().then(blogs =>
+			setBlogs( blogs )
+		)
 	}, [])
 
 	useEffect(() => {
@@ -38,14 +38,14 @@ const App = () => {
 	// Notifications:
 	const addNotification = (message) => {
 		setNotification(message)
-		setTimeout(() => { 
+		setTimeout(() => {
 			setNotification(null)
 		}, 5000)
 	}
 
 	const addError = (message) => {
 		setErrorMessage(message)
-		setTimeout(() => { 
+		setTimeout(() => {
 			setErrorMessage(null)
 		}, 5000)
 	}
@@ -59,7 +59,7 @@ const App = () => {
 				'loggedBlogUser', JSON.stringify(returnedUser)
 			)
 			blogService.setToken(returnedUser.token)
-			setUser(returnedUser)			
+			setUser(returnedUser)
 			addNotification('logged in as ' + returnedUser.username)
 			return true
 		}
@@ -98,7 +98,7 @@ const App = () => {
 
 	const deleteBlog = async (blog) => {
 		try {
-			if (window.confirm("Delete blog " + blog.title)) {
+			if (window.confirm('Delete blog ' + blog.title)) {
 				await blogService.deleteBlog(blog)
 				setBlogs(blogs.filter(b => b.id !== blog.id))
 				addNotification(blog.title + ' removed')
@@ -141,7 +141,7 @@ const App = () => {
 			)}
 			<br />
 			{ createBlogForm() }
-		</div>		
+		</div>
 	)
 
 	return (

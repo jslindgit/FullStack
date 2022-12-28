@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({blog, addLike, user, deleteBlog}) => {
+const Blog = ({ blog, addLike, user, deleteBlog }) => {
 	const blogStyle = {
 		padding: 10,
 		border: 'solid',
@@ -8,7 +8,7 @@ const Blog = ({blog, addLike, user, deleteBlog}) => {
 		marginBottom: 5
 	}
 
-	const [showAll, setShowAll] = useState(false)	
+	const [showAll, setShowAll] = useState(false)
 
 	const blogInfo = (blog) => {
 		if (showAll) {
@@ -19,7 +19,7 @@ const Blog = ({blog, addLike, user, deleteBlog}) => {
 					<button onClick={async () => await addLike(blog)}>Like</button>
 					<br />
 					Author: {blog.author}<br />
-					{removeButton(blog, user)}					
+					{removeButton(blog, user)}
 				</div>
 			)
 		}
@@ -38,7 +38,7 @@ const Blog = ({blog, addLike, user, deleteBlog}) => {
 			{blog.title}&nbsp;&nbsp;&nbsp;
 			<button onClick={() => setShowAll(!showAll)}>{showAll ? 'hide' : 'view'}</button>
 			{blogInfo(blog)}
-		</div>  
+		</div>
 	)
 }
 
