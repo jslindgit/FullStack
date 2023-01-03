@@ -59,14 +59,16 @@ test('<CreateBlogForm /> works and calls createBlog with the correct user input'
 	const user = userEvent.setup()
 	const mockHandler = jest.fn()
 
-	render(<CreateBlogForm createBlog={mockHandler} />)
+	const { container } = render(<CreateBlogForm createBlog={mockHandler} />)
 
-	const inputs = screen.getAllByRole('textbox')
+	const inputTitle = container.querySelector('#input-title')
+	const inputAuthor = container.querySelector('#input-author')
+	const inputUrl = container.querySelector('#input-url')
 	const submit = screen.getByText('create')
 
-	await user.type(inputs[0], blog.title)
-	await user.type(inputs[1], blog.author)
-	await user.type(inputs[2], blog.url)
+	await user.type(inputTitle, blog.title)
+	await user.type(inputAuthor, blog.author)
+	await user.type(inputUrl, blog.url)
 	await user.click(submit)
 
 	expect(mockHandler.mock.calls).toHaveLength(1)
