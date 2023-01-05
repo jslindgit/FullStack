@@ -26,9 +26,22 @@ const Blog = ({ blog, addLike, user, deleteBlog }) => {
 	}
 
 	const removeButton = (blog, user) => {
-		if (blog.user && blog.user.username === user.username) {
+		if (blog.user &&
+				(JSON.stringify(blog.user.username) === JSON.stringify(user.username)
+				|| (blog.user === user.id))) {
 			return (
 				<button onClick={async () => await deleteBlog(blog)}>Remove</button>
+			)
+		}
+		else {
+			return (
+				<div>
+					<br />
+					blog.user: {JSON.stringify(blog.user)}
+					<br />
+					user: {JSON.stringify(user)}
+					<br />
+				</div>
 			)
 		}
 	}
