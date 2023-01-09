@@ -33,8 +33,10 @@ describe('Blog app', function() {
 		cy.get('#button-login').click()
 	}
 
-	const createBlog = (title, author, url) => {
-		cy.contains('create new blog').click()
+	const createBlog = (title, author, url, openFormFirst = true) => {
+		if (openFormFirst) {
+			cy.contains('create new blog').click()
+		}
 		cy.get('#input-title').type(title)
 		cy.get('#input-author').type(author)
 		cy.get('#input-url').type(url)
@@ -78,6 +80,38 @@ describe('Blog app', function() {
 		})
 
 		it('A blog can be deleted by the user who created it', function() {
+			createBlog(testBlog.title, testBlog.author, testBlog.url)
+			cy.contains(testBlog.title)
+				.contains('view').click()
+			cy.contains('Remove').click()
+			cy.contains(testBlog.title)
+				.contains(testBlog.title + ' removed')
+		})
+
+		it.only('Blogs are sorted by the number of likes, in descending order', function() {			
+			createBlog('Second most likes', 'Second', 'www.secondmostlikes.com')
+			cy.contains('Second most likes')
+				.contains('view').click()
+			cy.contains('Second most likes')
+				.contains('Like').click()
+			cy.contains('Second most likes')
+				.contains('hide').click()
+			
+			createBlog('Least likes', 'Least', 'www.leastlikes.com', false)
+			
+			createBlog('Most likes', 'Most', 'www.mostlikes.com', false)
+			cy.contains('Most likes')
+				.contains('view').click()
+			cy.contains('Most likes')
+				.contains('Like').click()
+				.contains('Like').click()
+				.contains('Like').click()
+			cy.contains('Most likes')
+				.contains('hide').click()
+
+			cy.get('.blog').eq(0).should('contain', 'Most likes')
+			cy.get('.blog').eq(1).should('contain', 'Second most likes')
+			cy.get('.blog').eq(2).should('contain', 'Least likes')
 		})
 	})
 })

@@ -1,13 +1,6 @@
 import { useState } from 'react'
 
 const Blog = ({ blog, addLike, user, deleteBlog }) => {
-	const blogStyle = {
-		padding: 10,
-		border: 'solid',
-		borderWidth: 1,
-		marginBottom: 5
-	}
-
 	const [showAll, setShowAll] = useState(false)
 
 	const blogInfo = (blog) => {
@@ -47,7 +40,7 @@ const Blog = ({ blog, addLike, user, deleteBlog }) => {
 	}
 
 	return (
-		<div style={blogStyle}>
+		<div className='blog'>
 			{blog.title}&nbsp;&nbsp;&nbsp;
 			<button onClick={() => setShowAll(!showAll)}>{showAll ? 'hide' : 'view'}</button>
 			{blogInfo(blog)}
