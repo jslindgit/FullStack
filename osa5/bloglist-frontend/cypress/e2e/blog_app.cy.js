@@ -60,7 +60,7 @@ describe('Blog app', function() {
 		})
 	})
 
-	describe.only('When logged in', function() {
+	describe('When logged in', function() {
 		beforeEach(function() {
 			login(testUser.username, testUser.password)
 		})
@@ -88,7 +88,7 @@ describe('Blog app', function() {
 				.contains(testBlog.title + ' removed')
 		})
 
-		it.only('Blogs are sorted by the number of likes, in descending order', function() {			
+		it('Blogs are sorted by the number of likes, in descending order', function() {			
 			createBlog('Second most likes', 'Second', 'www.secondmostlikes.com')
 			cy.contains('Second most likes')
 				.contains('view').click()
