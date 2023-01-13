@@ -20,23 +20,33 @@ const Anecdote = ({ anecdote, handleClick }) => {
 const AnecdoteList = () => {
 	const dispatch = useDispatch()
 	const anecdotes = useSelector(state => state.anecdotes)
+	const filter = useSelector(state => state.filter)
 	
 	const vote = (anecdote) => {
 		dispatch(addVote(anecdote.id))		
 		dispatch(setMessage('You voted \'' + anecdote.content + '\''))
 	}
 
-	return (
-		<>
-			{anecdotes.slice().sort((a, b) => (b.votes - a.votes)).map(anecdote =>
-				<Anecdote
-					key={anecdote.id}
-					anecdote={anecdote}
-					handleClick={() => vote(anecdote)}
-				/>
-			)}
-		</>
-	)
+	const filtered = anecdotes.slice().filter(x => x.content.includes(filter)).sort((a, b) => (b.votes - a.votes))
+
+	if (filtered.length > 0) {
+		return (
+			<>
+				{filtered.map(anecdote =>
+					<Anecdote
+						key={anecdote.id}
+						anecdote={anecdote}
+						handleClick={() => vote(anecdote)}
+					/>
+				)}
+			</>
+		)
+	}
+	else {
+		return (
+			<div>No anecdotes matching '{filter}' found</div>
+		)
+	}
 }
 
 export default AnecdoteList
