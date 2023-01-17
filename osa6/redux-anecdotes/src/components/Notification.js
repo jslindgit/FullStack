@@ -1,5 +1,4 @@
-import { useSelector, useDispatch } from "react-redux"
-import { clearMessage } from "../reducers/notificationReducer"
+import { useSelector } from "react-redux"
 
 const Notification = () => {
 	const notification = useSelector(state => state.notification)
@@ -8,9 +7,6 @@ const Notification = () => {
 		padding: 10,
 		borderWidth: 1
 	}
-
-	const dispatch = useDispatch()
-	setTimeout(() => dispatch(clearMessage()), 5000)
 	
 	if (notification.length > 0) {
 		return (
