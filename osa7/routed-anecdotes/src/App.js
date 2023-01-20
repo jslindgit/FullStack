@@ -4,6 +4,7 @@ import {
 	Routes, Route, Link,
 	useParams, useNavigate
 } from 'react-router-dom'
+import { useField } from './hooks'
 
 const Menu = ({ anecdotes, addNew, setNotification }) => {
 	const padding = {
@@ -12,8 +13,8 @@ const Menu = ({ anecdotes, addNew, setNotification }) => {
 	return (
 		<Router>
 			<div>			
-				<Link style={padding} to="/">anecdotes</Link>
-				<Link style={padding} to="/create">create new</Link>
+				<Link style={padding} to="/">anecdotes</Link>|&nbsp; 
+				<Link style={padding} to="/create">create new</Link>|&nbsp; 
 				<Link style={padding} to="/about">about</Link>
 			</div>	
 
@@ -75,40 +76,48 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-	const [content, setContent] = useState('')
-	const [author, setAuthor] = useState('')
-	const [info, setInfo] = useState('')
+	const content = useField('text')
+	const author = useField('text')
+	const info = useField('text')
 	const navigate = useNavigate()
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		props.addNew({
-			content,
-			author,
-			info,
+			content: content.value,
+			author: author.value,
+			info: info.value,
 			votes: 0
 		})
-		props.setNotification('A new anecdote \'' + content + '\' created!')
+		props.setNotification('A new anecdote \'' + content.value + '\' created!')
 		navigate('/')
+	}
+
+	const reset = (event) => {
+		event.preventDefault()
+		content.onReset()
+		author.onReset()
+		info.onReset()
 	}
 
 	return (
 		<div>
-			<h2>create a new anecdote</h2>
+			<h2>Create a new anecdote</h2>
 			<form onSubmit={handleSubmit}>
 				<div>
-					content
-					<input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+					Content:&nbsp;
+					<input {...content} />
 				</div>
 				<div>
-					author
-					<input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+					Author:&nbsp;
+					<input {...author} />
 				</div>
 				<div>
-					url for more info
-					<input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+					URL for more info:&nbsp;
+					<input {...info} />
 				</div>
-				<button>create</button>
+				<button>Create</button>&nbsp;
+				<button onClick={reset}>Reset</button>
 				<br /><br />
 			</form>
 		</div>
