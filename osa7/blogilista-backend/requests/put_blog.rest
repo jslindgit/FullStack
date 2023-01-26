@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/6399e830d4e052895416efa8
+Content-Type: application/json
+
+{
+	"title": "Testiblogi",
+	"url": "https://www.testiblogi2.fi",
+	"author": "Teppo Testaaja",
+	"likes": 359
+}

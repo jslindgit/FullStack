@@ -1,0 +1,13 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+// teppo: 
+//Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlcHBvIiwiaWQiOiI2Mzk5ZDUxNjk0MWIwM2VjYzhjZDg5YmUiLCJpYXQiOjE2NzEwMzA1NTN9.PWFkpn9LcW-2apFv7qK1vgy2bqR7C-b3n77t5LXk3bo
+// testuser2:
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMiIsImlkIjoiNjM5OWQyNWM1YTEyNWM0MmFjYjg5MzVkIiwiaWF0IjoxNjcxMTE1MTkwfQ.TeDBu_k6XM08pq5CJotdbu4ZhzLlcHKvqakGoFlGH18
+
+{
+	"title": "Tiinan Testiblogi",
+	"url": "https://www.testi.com",
+	"author": "Tiina T",
+	"likes": 612
+}
