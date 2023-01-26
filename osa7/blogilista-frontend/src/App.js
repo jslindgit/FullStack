@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+
+// Reducers:
+import { setNotification } from './reducers/notificationReducer'
 
 // Components:
 import Blog from './components/Blog'
@@ -15,10 +19,11 @@ import loginService from './services/login'
 import './index.css'
 
 const App = () => {
+    const dispatch = useDispatch()
+
     const [user, setUser] = useState(null)
     const [blogs, setBlogs] = useState([])
     const [errorMessage, setErrorMessage] = useState(null)
-    const [notification, setNotification] = useState(null)
 
     useEffect(() => {
         blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -34,13 +39,6 @@ const App = () => {
     }, [])
 
     // Notifications:
-    const addNotification = (message) => {
-        setNotification(message)
-        setTimeout(() => {
-            setNotification(null)
-        }, 5000)
-    }
-
     const addError = (message) => {
         setErrorMessage(message)
         setTimeout(() => {
@@ -104,7 +102,7 @@ const App = () => {
             if (window.confirm('Delete blog ' + blog.title)) {
                 await blogService.deleteBlog(blog)
                 setBlogs(blogs.filter((b) => b.id !== blog.id))
-                addNotification(blog.title + ' removed')
+                dispatch(setNotification(blog.title + ' removed', 5))
             }
         } catch (exception) {
             console.log('deleteBlog exception', exception)
@@ -154,7 +152,7 @@ const App = () => {
         <div>
             <h1>blogs</h1>
 
-            <Notification message={notification} />
+            <Notification />
             <ErrorMessage message={errorMessage} />
 
             {user === null ? loginForm() : listBlogs()}
