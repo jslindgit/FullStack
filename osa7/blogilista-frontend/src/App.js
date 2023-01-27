@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // Reducers:
 import { setNotification } from './reducers/notificationReducer'
+import { addBlog, initializeBlogs } from './reducers/blogsReducer'
 
 // Components:
 import Blog from './components/Blog'
@@ -20,14 +21,14 @@ import './index.css'
 
 const App = () => {
     const dispatch = useDispatch()
+    const blogs = useSelector((state) => state.blogs)
 
     const [user, setUser] = useState(null)
-    const [blogs, setBlogs] = useState([])
     const [errorMessage, setErrorMessage] = useState(null)
 
     useEffect(() => {
-        blogService.getAll().then((blogs) => setBlogs(blogs))
-    }, [])
+        dispatch(initializeBlogs())
+    }, [dispatch])
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
@@ -60,7 +61,9 @@ const App = () => {
             )
             blogService.setToken(returnedUser.token)
             setUser(returnedUser)
-            addNotification('logged in as ' + returnedUser.username)
+            dispatch(
+                setNotification('logged in as ' + returnedUser.username, 5)
+            )
             return true
         } catch (exception) {
             addError('wrong credentials')
@@ -72,16 +75,12 @@ const App = () => {
         event.preventDefault()
         window.localStorage.removeItem('loggedBlogUser')
         setUser(null)
-        addNotification('logged out')
+        dispatch(setNotification('logged out', 5))
     }
 
     const createBlog = async ({ title, author, url }) => {
-        try {
-            const addedBlog = await blogService.create({ title, author, url })
-            setBlogs(blogs.concat(addedBlog))
-        } catch (exception) {
-            console.log('createBlog exception', exception)
-        }
+        const addedBlog = await blogService.create({ title, author, url })
+        dispatch(addBlog(addedBlog))
     }
 
     const addLike = async (blog) => {
