@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // Reducers:
 import { setNotification } from './reducers/notificationReducer'
 import { addBlog, initializeBlogs, setBlogs } from './reducers/blogsReducer'
+import { setUser } from './reducers/userReducer'
 
 // Components:
 import Blog from './components/Blog'
@@ -22,8 +23,8 @@ import './index.css'
 const App = () => {
     const dispatch = useDispatch()
     const blogs = useSelector((state) => state.blogs)
+    const user = useSelector((state) => state.user)
 
-    const [user, setUser] = useState(null)
     const [errorMessage, setErrorMessage] = useState(null)
 
     useEffect(() => {
@@ -33,9 +34,9 @@ const App = () => {
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
         if (loggedUserJSON && loggedUserJSON !== '') {
-            const user = JSON.parse(loggedUserJSON)
-            setUser(user)
-            blogService.setToken(user.token)
+            const loggedUser = JSON.parse(loggedUserJSON)
+            dispatch(setUser(loggedUser))
+            blogService.setToken(loggedUser.token)
         }
     }, [])
 
@@ -60,7 +61,7 @@ const App = () => {
                 JSON.stringify(returnedUser)
             )
             blogService.setToken(returnedUser.token)
-            setUser(returnedUser)
+            dispatch(setUser(returnedUser))
             dispatch(
                 setNotification('logged in as ' + returnedUser.username, 5)
             )
@@ -74,7 +75,7 @@ const App = () => {
     const handleLogout = (event) => {
         event.preventDefault()
         window.localStorage.removeItem('loggedBlogUser')
-        setUser(null)
+        dispatch(setUser(null))
         dispatch(setNotification('logged out', 5))
     }
 

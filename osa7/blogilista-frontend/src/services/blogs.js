@@ -3,7 +3,7 @@ const baseUrl = '/api/blogs'
 
 let token = null
 
-const setToken = (newToken) => {
+const setToken = async (newToken) => {
     token = `bearer ${newToken}`
 }
 
