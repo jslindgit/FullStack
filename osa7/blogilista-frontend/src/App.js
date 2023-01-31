@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // Reducers:
 import { setNotification } from './reducers/notificationReducer'
-import { addBlog, initializeBlogs } from './reducers/blogsReducer'
+import { addBlog, initializeBlogs, setBlogs } from './reducers/blogsReducer'
 
 // Components:
 import Blog from './components/Blog'
@@ -84,27 +84,22 @@ const App = () => {
     }
 
     const addLike = async (blog) => {
-        try {
-            const updatedBlog = await blogService.addLike(blog)
+        const updatedBlog = await blogService.addLike(blog)
+        dispatch(
             setBlogs(
                 blogs
-                    .sort((a, b) => b.likes - a.likes)
+                    .slice()
                     .map((b) => (b.id !== updatedBlog.id ? b : updatedBlog))
+                    .sort((a, b) => b.likes - a.likes)
             )
-        } catch (exception) {
-            console.log('addLike exception', exception)
-        }
+        )
     }
 
     const deleteBlog = async (blog) => {
-        try {
-            if (window.confirm('Delete blog ' + blog.title)) {
-                await blogService.deleteBlog(blog)
-                setBlogs(blogs.filter((b) => b.id !== blog.id))
-                dispatch(setNotification(blog.title + ' removed', 5))
-            }
-        } catch (exception) {
-            console.log('deleteBlog exception', exception)
+        if (window.confirm('Delete blog ' + blog.title)) {
+            await blogService.deleteBlog(blog)
+            dispatch(setBlogs(blogs.filter((b) => b.id !== blog.id)))
+            dispatch(setNotification(blog.title + ' removed', 5))
         }
     }
 
