@@ -7,9 +7,10 @@ import { addBlog, initializeBlogs, setBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
 
 // Components:
-import Blog from './components/Blog'
 import CreateBlogForm from './components/CreateBlogForm'
 import ErrorMessage from './components/ErrorMessage'
+import ListBlogs from './components/ListBlogs'
+import ListUsers from './components/ListUsers'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -112,34 +113,11 @@ const App = () => {
     )
 
     const logoutForm = () => (
-        <>
+        <div>
+            {user.realname} logged in
             <form onSubmit={handleLogout}>
                 <button type="submit">logout</button>
             </form>
-        </>
-    )
-
-    const createBlogForm = () => (
-        <Togglable buttonLabel="create new blog">
-            <CreateBlogForm createBlog={createBlog} />
-        </Togglable>
-    )
-
-    const listBlogs = () => (
-        <div>
-            {user.realname} logged in {logoutForm()}
-            <br />
-            {blogs.map((blog) => (
-                <Blog
-                    key={blog.id}
-                    blog={blog}
-                    addLike={addLike}
-                    user={user}
-                    deleteBlog={deleteBlog}
-                />
-            ))}
-            <br />
-            {createBlogForm()}
         </div>
     )
 
@@ -149,8 +127,15 @@ const App = () => {
 
             <Notification />
             <ErrorMessage message={errorMessage} />
-
-            {user === null ? loginForm() : listBlogs()}
+            {user === null ? loginForm() : logoutForm()}
+            <br />
+            <ListUsers />
+            <br />
+            <ListBlogs
+                addLike={addLike}
+                createBlog={createBlog}
+                deleteBlog={deleteBlog}
+            />
         </div>
     )
 }
