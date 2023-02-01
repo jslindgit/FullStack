@@ -16,6 +16,7 @@ const ListBlogs = ({ addLike, createBlog, deleteBlog }) => {
 
     return (
         <div>
+            <h1>Blogs</h1>
             {blogs.map((blog) => (
                 <Blog
                     key={blog.id}

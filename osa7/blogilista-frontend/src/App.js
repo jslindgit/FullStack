@@ -1,3 +1,4 @@
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -5,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { addBlog, initializeBlogs, setBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 // Components:
 import CreateBlogForm from './components/CreateBlogForm'
@@ -14,6 +16,7 @@ import ListUsers from './components/ListUsers'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import UserInfo from './components/UserInfo'
 
 // Services:
 import blogService from './services/blogs'
@@ -25,8 +28,13 @@ const App = () => {
     const dispatch = useDispatch()
     const blogs = useSelector((state) => state.blogs)
     const user = useSelector((state) => state.user)
+    const users = useSelector((state) => state.users)
 
     const [errorMessage, setErrorMessage] = useState(null)
+
+    useEffect(() => {
+        dispatch(initializeUsers())
+    }, [dispatch])
 
     useEffect(() => {
         dispatch(initializeBlogs())
@@ -123,19 +131,37 @@ const App = () => {
 
     return (
         <div>
-            <h1>blogs</h1>
-
             <Notification />
             <ErrorMessage message={errorMessage} />
             {user === null ? loginForm() : logoutForm()}
             <br />
-            <ListUsers />
-            <br />
-            <ListBlogs
-                addLike={addLike}
-                createBlog={createBlog}
-                deleteBlog={deleteBlog}
-            />
+            <Router>
+                <div>
+                    <Link to="/">Blogs</Link>
+                    &nbsp;|&nbsp;
+                    <Link to="/users">Users</Link>
+                </div>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <ListBlogs
+                                addLike={addLike}
+                                createBlog={createBlog}
+                                deleteBlog={deleteBlog}
+                            />
+                        }
+                    />
+                    <Route
+                        path="/users"
+                        element={<ListUsers users={users} />}
+                    />
+                    <Route
+                        path="/users/:id"
+                        element={<UserInfo users={users} />}
+                    />
+                </Routes>
+            </Router>
         </div>
     )
 }
