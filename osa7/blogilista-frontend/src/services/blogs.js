@@ -28,7 +28,7 @@ const addLike = async (blog) => {
         baseUrl + '/' + updatedBlog.id,
         updatedBlog
     )
-    return response.data
+    return { ...response.data, user: updatedBlog.user }
 }
 
 const deleteBlog = async (blog) => {

@@ -4,7 +4,7 @@ import Blog from './Blog'
 import CreateBlogForm from './CreateBlogForm'
 import Togglable from './Togglable'
 
-const ListBlogs = ({ addLike, createBlog, deleteBlog }) => {
+const ListBlogs = ({ createBlog, deleteBlog }) => {
     const blogs = useSelector((state) => state.blogs)
     const user = useSelector((state) => state.user)
 
@@ -21,7 +21,6 @@ const ListBlogs = ({ addLike, createBlog, deleteBlog }) => {
                 <Blog
                     key={blog.id}
                     blog={blog}
-                    addLike={addLike}
                     user={user}
                     deleteBlog={deleteBlog}
                 />

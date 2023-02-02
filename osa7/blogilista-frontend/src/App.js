@@ -9,7 +9,7 @@ import { setUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 
 // Components:
-import CreateBlogForm from './components/CreateBlogForm'
+import BlogInfo from './components/BlogInfo'
 import ErrorMessage from './components/ErrorMessage'
 import ListBlogs from './components/ListBlogs'
 import ListUsers from './components/ListUsers'
@@ -122,10 +122,21 @@ const App = () => {
 
     const logoutForm = () => (
         <div>
-            {user.realname} logged in
             <form onSubmit={handleLogout}>
+                {user.realname} logged in&nbsp;
                 <button type="submit">logout</button>
             </form>
+        </div>
+    )
+
+    const menu = () => (
+        <div className="menu">
+            <Link to="/">Blogs</Link>
+            &nbsp;|&nbsp;
+            <Link to="/users">Users</Link>
+            <br />
+            <br />
+            {user === null ? loginForm() : logoutForm()}
         </div>
     )
 
@@ -133,35 +144,24 @@ const App = () => {
         <div>
             <Notification />
             <ErrorMessage message={errorMessage} />
-            {user === null ? loginForm() : logoutForm()}
-            <br />
-            <Router>
-                <div>
-                    <Link to="/">Blogs</Link>
-                    &nbsp;|&nbsp;
-                    <Link to="/users">Users</Link>
-                </div>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <ListBlogs
-                                addLike={addLike}
-                                createBlog={createBlog}
-                                deleteBlog={deleteBlog}
-                            />
-                        }
-                    />
-                    <Route
-                        path="/users"
-                        element={<ListUsers users={users} />}
-                    />
-                    <Route
-                        path="/users/:id"
-                        element={<UserInfo users={users} />}
-                    />
-                </Routes>
-            </Router>
+            <div>{menu()}</div>
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <ListBlogs
+                            createBlog={createBlog}
+                            deleteBlog={deleteBlog}
+                        />
+                    }
+                />
+                <Route
+                    path="/blogs/:id"
+                    element={<BlogInfo blogs={blogs} addLike={addLike} />}
+                />
+                <Route path="/users" element={<ListUsers users={users} />} />
+                <Route path="/users/:id" element={<UserInfo users={users} />} />
+            </Routes>
         </div>
     )
 }

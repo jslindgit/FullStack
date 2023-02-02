@@ -32,7 +32,6 @@ export const initializeBlogs = () => {
 }
 
 export const setBlogs = (blogs) => {
-    console.log('setBlogs.blogs: ', blogs)
     return async (dispatch) => {
         dispatch(setItems(blogs))
     }
