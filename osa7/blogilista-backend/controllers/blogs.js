@@ -82,6 +82,34 @@ blogsRouter.post('/', async (request, response, next) => {
     }
 })
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+    try {
+        const blog = await Blog.findById(request.params.id)
+        if (blog) {
+            console.log('blog.comments:', blog.comments)
+            console.log('request.body', request.body)
+            blog.comments = [...blog.comments, request.body.comment]
+            console.log('blog', blog)
+            updatedBlog = await Blog.findByIdAndUpdate(
+                request.params.id,
+                blog,
+                { new: true }
+            )
+            console.log('updatedBlog:', updatedBlog)
+
+            if (updatedBlog) {
+                response.status(200).json(updatedBlog)
+            } else {
+                response.status(404).end()
+            }
+        } else {
+            response.status(404).end()
+        }
+    } catch (exception) {
+        console.log('blogsRouter.post error:', exception)
+    }
+})
+
 blogsRouter.put('/:id', async (request, response, next) => {
     try {
         const body = request.body

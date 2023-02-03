@@ -6,5 +6,4 @@ Content-Type: application/json
 	"url": "https://www.testiblogi2.fi",
 	"author": "Teppo Testaaja",
 	"likes": 359,
-	"comments": [ "Kommentti1", "Kommentti2" ]
 }
