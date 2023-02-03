@@ -1,7 +1,17 @@
 import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { initializeUsers } from '../reducers/usersReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
-const ListUsers = (users) => {
-    const userRows = users.users.map((u) => <BasicInfo user={u} key={u.id} />)
+const ListUsers = () => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(initializeUsers())
+    }, [])
+
+    const users = useSelector((state) => state.users)
+    const userRows = users.map((u) => <BasicInfo user={u} key={u.id} />)
 
     return (
         <div>

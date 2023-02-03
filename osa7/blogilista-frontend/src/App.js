@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Reducers:
@@ -10,7 +10,6 @@ import { initializeUsers } from './reducers/usersReducer'
 
 // Components:
 import BlogInfo from './components/BlogInfo'
-import ErrorMessage from './components/ErrorMessage'
 import ListBlogs from './components/ListBlogs'
 import ListUsers from './components/ListUsers'
 import LoginForm from './components/LoginForm'
@@ -29,8 +28,6 @@ const App = () => {
     const blogs = useSelector((state) => state.blogs)
     const user = useSelector((state) => state.user)
     const users = useSelector((state) => state.users)
-
-    const [errorMessage, setErrorMessage] = useState(null)
 
     useEffect(() => {
         dispatch(initializeUsers())
@@ -51,10 +48,7 @@ const App = () => {
 
     // Notifications:
     const addError = (message) => {
-        setErrorMessage(message)
-        setTimeout(() => {
-            setErrorMessage(null)
-        }, 5000)
+        dispatch(setNotification(message, 5, 'error'))
     }
 
     // Actions:
@@ -72,7 +66,11 @@ const App = () => {
             blogService.setToken(returnedUser.token)
             dispatch(setUser(returnedUser))
             dispatch(
-                setNotification('logged in as ' + returnedUser.username, 5)
+                setNotification(
+                    'logged in as ' + returnedUser.username,
+                    5,
+                    'notification'
+                )
             )
             return true
         } catch (exception) {
@@ -143,7 +141,6 @@ const App = () => {
     return (
         <div>
             <Notification />
-            <ErrorMessage message={errorMessage} />
             <div>{menu()}</div>
             <Routes>
                 <Route
@@ -159,7 +156,7 @@ const App = () => {
                     path="/blogs/:id"
                     element={<BlogInfo blogs={blogs} addLike={addLike} />}
                 />
-                <Route path="/users" element={<ListUsers users={users} />} />
+                <Route path="/users" element={<ListUsers />} />
                 <Route path="/users/:id" element={<UserInfo users={users} />} />
             </Routes>
         </div>

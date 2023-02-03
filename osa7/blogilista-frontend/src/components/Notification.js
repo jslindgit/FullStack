@@ -2,15 +2,16 @@ import { connect } from 'react-redux'
 
 const Notification = (props) => {
     const notification = props.notification
-
-    const style = {
-        border: 'solid',
-        padding: 10,
-        borderWidth: 1,
+    if (!notification) {
+        return null
     }
 
-    if (notification.length > 0) {
-        return <div style={style}>{notification}</div>
+    const className = notification.className
+        ? notification.className
+        : 'notification'
+
+    if (notification.message && notification.message.length > 0) {
+        return <div className={className}>{notification.message}</div>
     } else {
         return <div />
     }

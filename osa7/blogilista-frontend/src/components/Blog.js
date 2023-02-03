@@ -2,10 +2,14 @@ import { BrowserRouter as Router, Link } from 'react-router-dom'
 
 const Blog = ({ blog, user, deleteBlog }) => {
     const blogInfo = (blog) => {
-        return <div>{removeButton(blog, user)}</div>
+        return <span>{removeButton(blog, user)}</span>
     }
 
     const removeButton = (blog, user) => {
+        if (!user) {
+            return null
+        }
+
         if (
             blog.user &&
             (JSON.stringify(blog.user.username) ===
@@ -18,15 +22,7 @@ const Blog = ({ blog, user, deleteBlog }) => {
                 </button>
             )
         } else {
-            return (
-                <div>
-                    <br />
-                    blog.user: {JSON.stringify(blog.user)}
-                    <br />
-                    user: {JSON.stringify(user)}
-                    <br />
-                </div>
-            )
+            return null
         }
     }
 

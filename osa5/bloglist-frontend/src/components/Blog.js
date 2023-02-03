@@ -19,6 +19,10 @@ const Blog = ({ blog, addLike, user, deleteBlog }) => {
 	}
 
 	const removeButton = (blog, user) => {
+		if (!user) {
+            return null
+        }
+		
 		if (blog.user &&
 				(JSON.stringify(blog.user.username) === JSON.stringify(user.username)
 				|| (blog.user === user.id))) {
@@ -27,15 +31,7 @@ const Blog = ({ blog, addLike, user, deleteBlog }) => {
 			)
 		}
 		else {
-			return (
-				<div>
-					<br />
-					blog.user: {JSON.stringify(blog.user)}
-					<br />
-					user: {JSON.stringify(user)}
-					<br />
-				</div>
-			)
+			return null
 		}
 	}
 
