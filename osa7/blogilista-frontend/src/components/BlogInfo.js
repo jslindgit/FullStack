@@ -1,7 +1,10 @@
 import { BrowserRouter as Router, Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 
 const BlogInfo = ({ blogs, addLike }) => {
+    const { comment, setComment } = useState('')
+
     const id = useParams().id
     const blog = blogs.find((b) => b.id === id)
 
@@ -20,6 +23,10 @@ const BlogInfo = ({ blogs, addLike }) => {
         )
     }
 
+    const addComment = (event) => {
+        event.preventDefault()   
+    }
+
     return (
         <div>
             <h2>{blog.title}</h2>
@@ -35,6 +42,20 @@ const BlogInfo = ({ blogs, addLike }) => {
             </p>
             <p>Added by {blog.user.realname}</p>
             <h3>Comments</h3>
+            <form onSubmit={addComment}>
+                <input
+                    type="text"
+                    value={comment}
+                    name="comment"
+                    onChange={({target}) => setComment(target.value)}
+                    id="input-comment"
+                    style={{ width: "300px" }}
+                />
+                &nbsp;&nbsp;&nbsp;
+                <button id="button-comment" type="submit">
+                    Add comment
+                </button>
+            </form>
             {comments}
             <Link to="/">Back</Link>
         </div>

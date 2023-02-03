@@ -4,13 +4,13 @@ import Blog from './Blog'
 import CreateBlogForm from './CreateBlogForm'
 import Togglable from './Togglable'
 
-const ListBlogs = ({ createBlog, deleteBlog }) => {
+const ListBlogs = ({ deleteBlog }) => {
     const blogs = useSelector((state) => state.blogs)
     const user = useSelector((state) => state.user)
 
     const createBlogForm = () => (
         <Togglable buttonLabel="create new blog">
-            <CreateBlogForm createBlog={createBlog} />
+            <CreateBlogForm />
         </Togglable>
     )
 

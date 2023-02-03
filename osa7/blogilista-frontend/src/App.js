@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // Reducers:
 import { setNotification } from './reducers/notificationReducer'
-import { addBlog, initializeBlogs, setBlogs } from './reducers/blogsReducer'
+import { initializeBlogs, setBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 
@@ -86,11 +86,6 @@ const App = () => {
         dispatch(setNotification('logged out', 5))
     }
 
-    const createBlog = async ({ title, author, url }) => {
-        const addedBlog = await blogService.create({ title, author, url })
-        dispatch(addBlog(addedBlog))
-    }
-
     const addLike = async (blog) => {
         const updatedBlog = await blogService.addLike(blog)
         dispatch(
@@ -145,12 +140,7 @@ const App = () => {
             <Routes>
                 <Route
                     path="/"
-                    element={
-                        <ListBlogs
-                            createBlog={createBlog}
-                            deleteBlog={deleteBlog}
-                        />
-                    }
+                    element={<ListBlogs deleteBlog={deleteBlog} />}
                 />
                 <Route
                     path="/blogs/:id"

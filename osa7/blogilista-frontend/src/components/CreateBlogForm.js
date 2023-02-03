@@ -1,13 +1,19 @@
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import { setNotification } from '../reducers/notificationReducer'
+import blogService from '../services/blogs'
 
-const CreateBlogForm = ({ createBlog }) => {
+const CreateBlogForm = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
 
     const dispatch = useDispatch()
+
+    const createBlog = async ({ title, author, url }) => {
+        const addedBlog = await blogService.create({ title, author, url })
+        dispatch(addBlog(addedBlog))
+    }
 
     const addBlog = (event) => {
         event.preventDefault()
