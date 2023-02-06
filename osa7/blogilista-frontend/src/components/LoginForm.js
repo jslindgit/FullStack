@@ -1,54 +1,100 @@
+import { useDispatch } from 'react-redux'
 import { useState } from 'react'
-import PropTypes from 'prop-types'
 
-const LoginForm = ({ login }) => {
-	const [username, setUserName] = useState('')
-	const [password, setPassword] = useState('')
+// Services:
+import blogService from '../services/blogs'
+import loginService from '../services/login'
 
-	const handleSubmit = async (event) => {
-		event.preventDefault()
-		const success = await login({ username, password })
-		if (success) {
-			setUserName('')
-		}
-		setPassword('')
-	}
+// Reducers:
+import { setNotification } from '../reducers/notificationReducer'
+import { setUser } from '../reducers/userReducer'
 
-	return (
-		<div>
-			<h2>Login</h2>
+const LoginForm = () => {
+    const dispatch = useDispatch()
 
-			<form onSubmit={handleSubmit}>
-				<div>
-					username &nbsp;
-					<input
-						type="text"
-						value={username}
-						name="Username"
-						onChange={({ target }) => setUserName(target.value)}
-						id="input-username"
-					/>
-				</div>
-				<br />
-				<div>
-					password &nbsp;
-					<input
-						type="password"
-						value={password}
-						name="Password"
-						onChange={({ target }) => setPassword(target.value)}
-						id="input-password"
-					/>
-				</div>
-				<br />
-				<button id="button-login" type="submit">login</button>
-			</form>
-		</div>
-	)
-}
+    const [username, setUserName] = useState('')
+    const [password, setPassword] = useState('')
 
-LoginForm.propTypes = {
-	login: PropTypes.func.isRequired
+    const login = async () => {
+        try {
+            const returnedUser = await loginService.login({
+                username,
+                password,
+            })
+
+            window.localStorage.setItem(
+                'loggedBlogUser',
+                JSON.stringify(returnedUser)
+            )
+            blogService.setToken(returnedUser.token)
+            dispatch(setUser(returnedUser))
+            dispatch(
+                setNotification(
+                    'Logged in as ' + returnedUser.username,
+                    5,
+                    'notification'
+                )
+            )
+            return true
+        } catch (exception) {
+            console.log(exception)
+            dispatch(setNotification('Wrong credentials', 5, 'error'))
+            return false
+        }
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        const success = await login({ username, password })
+        if (success) {
+            setUserName('')
+        }
+        setPassword('')
+    }
+
+    return (
+        <div>
+            <h2>Login</h2>
+
+            <form onSubmit={handleSubmit}>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Username:</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    value={username}
+                                    name="Username"
+                                    onChange={({ target }) =>
+                                        setUserName(target.value)
+                                    }
+                                    id="input-username"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Password:</td>
+                            <td>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    name="Password"
+                                    onChange={({ target }) =>
+                                        setPassword(target.value)
+                                    }
+                                    id="input-password"
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="button-login" type="submit">
+                    Login
+                </button>
+            </form>
+        </div>
+    )
 }
 
 export default LoginForm

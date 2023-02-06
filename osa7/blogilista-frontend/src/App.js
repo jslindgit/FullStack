@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Reducers:
-import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, setBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
@@ -12,21 +11,21 @@ import { initializeUsers } from './reducers/usersReducer'
 import BlogInfo from './components/BlogInfo'
 import ListBlogs from './components/ListBlogs'
 import ListUsers from './components/ListUsers'
-import LoginForm from './components/LoginForm'
+import Menu from './components/Menu'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import UserInfo from './components/UserInfo'
 
 // Services:
 import blogService from './services/blogs'
-import loginService from './services/login'
 
 import './index.css'
 
 const App = () => {
+    useEffect(() => {
+        document.title = 'Blog App'
+    }, [])
+
     const dispatch = useDispatch()
-    const blogs = useSelector((state) => state.blogs)
-    const user = useSelector((state) => state.user)
     const users = useSelector((state) => state.users)
 
     useEffect(() => {
@@ -46,95 +45,13 @@ const App = () => {
         }
     }, [])
 
-    // Notifications:
-    const addError = (message) => {
-        dispatch(setNotification(message, 5, 'error'))
-    }
-
-    // Actions:
-    const login = async ({ username, password }) => {
-        try {
-            const returnedUser = await loginService.login({
-                username,
-                password,
-            })
-
-            window.localStorage.setItem(
-                'loggedBlogUser',
-                JSON.stringify(returnedUser)
-            )
-            blogService.setToken(returnedUser.token)
-            dispatch(setUser(returnedUser))
-            dispatch(
-                setNotification(
-                    'logged in as ' + returnedUser.username,
-                    5,
-                    'notification'
-                )
-            )
-            return true
-        } catch (exception) {
-            addError('wrong credentials')
-            return false
-        }
-    }
-
-    const handleLogout = (event) => {
-        event.preventDefault()
-        window.localStorage.removeItem('loggedBlogUser')
-        dispatch(setUser(null))
-        dispatch(setNotification('logged out', 5))
-    }
-
-    const addLike = async (blog) => {
-        const updatedBlog = await blogService.addLike(blog)
-        dispatch(
-            setBlogs(
-                blogs
-                    .slice()
-                    .map((b) => (b.id !== updatedBlog.id ? b : updatedBlog))
-                    .sort((a, b) => b.likes - a.likes)
-            )
-        )
-    }
-
-    // Forms:
-    const loginForm = () => (
-        <Togglable buttonLabel="Login">
-            <LoginForm login={login} />
-        </Togglable>
-    )
-
-    const logoutForm = () => (
-        <div>
-            <form onSubmit={handleLogout}>
-                {user.realname} logged in&nbsp;
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    )
-
-    const menu = () => (
-        <div className="menu">
-            <Link to="/">Blogs</Link>
-            &nbsp;|&nbsp;
-            <Link to="/users">Users</Link>
-            <br />
-            <br />
-            {user === null ? loginForm() : logoutForm()}
-        </div>
-    )
-
     return (
         <div>
             <Notification />
-            <div>{menu()}</div>
+            <Menu />
             <Routes>
                 <Route path="/" element={<ListBlogs />} />
-                <Route
-                    path="/blogs/:id"
-                    element={<BlogInfo blogs={blogs} addLike={addLike} />}
-                />
+                <Route path="/blogs/:id" element={<BlogInfo />} />
                 <Route path="/users" element={<ListUsers />} />
                 <Route path="/users/:id" element={<UserInfo users={users} />} />
             </Routes>

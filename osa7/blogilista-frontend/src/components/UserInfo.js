@@ -16,7 +16,11 @@ const UserInfo = (users) => {
     return (
         <div>
             <h1>{user.realname}</h1>
-            <h3>Added blogs</h3>
+            <h3>
+                {user.blogs.length > 0
+                    ? 'Added blogs'
+                    : "Hasn't added any blogs"}
+            </h3>
             <ul>{blogList}</ul>
             <Link to="/users">Back</Link>
         </div>

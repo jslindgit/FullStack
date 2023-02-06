@@ -6,12 +6,13 @@ import blogService from '../services/blogs'
 import { initializeBlogs, setBlogs } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const BlogInfo = ({ blogs, addLike }) => {
+const BlogInfo = () => {
     const [comment, setComment] = useState('')
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user = useSelector((state) => state.user)
+    const blogs = useSelector((state) => state.blogs)
 
     const id = useParams().id
     const blog = blogs.find((b) => b.id === id)
@@ -38,6 +39,18 @@ const BlogInfo = ({ blogs, addLike }) => {
         }
     }
 
+    const addLike = async (blog) => {
+        const updatedBlog = await blogService.addLike(blog)
+        dispatch(
+            setBlogs(
+                blogs
+                    .slice()
+                    .map((b) => (b.id !== updatedBlog.id ? b : updatedBlog))
+                    .sort((a, b) => b.likes - a.likes)
+            )
+        )
+    }
+
     const deleteBlog = async () => {
         if (window.confirm('Delete blog ' + blog.title)) {
             await blogService.deleteBlog(blog)
@@ -48,8 +61,9 @@ const BlogInfo = ({ blogs, addLike }) => {
     }
 
     const postComment = async () => {
-        const updatedBlog = await blogService.addComment(id, comment)
+        await blogService.addComment(id, comment)
         setComment('')
+        dispatch(setNotification('Comment added!', 5, 'notification'))
         dispatch(initializeBlogs())
     }
 
@@ -82,12 +96,16 @@ const BlogInfo = ({ blogs, addLike }) => {
                     {blog.url}
                 </Link>
             </p>
-            <p>Author: {blog.author}</p>
             <p>
-                Likes: {blog.likes}&nbsp;
+                <b>Author:</b> {blog.author}
+            </p>
+            <p>
+                <b>Likes:</b> {blog.likes}&nbsp;
                 <button onClick={async () => await addLike(blog)}>Like</button>
             </p>
-            <p>Added by {blog.user.realname}</p>
+            <p>
+                <b>Added by:</b> {blog.user.realname}
+            </p>
             <p>{removeButton()}</p>
             <h3>Comments</h3>
             <form onSubmit={addComment}>
