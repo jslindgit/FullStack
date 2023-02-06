@@ -98,17 +98,9 @@ const App = () => {
         )
     }
 
-    const deleteBlog = async (blog) => {
-        if (window.confirm('Delete blog ' + blog.title)) {
-            await blogService.deleteBlog(blog)
-            dispatch(setBlogs(blogs.filter((b) => b.id !== blog.id)))
-            dispatch(setNotification(blog.title + ' removed', 5))
-        }
-    }
-
     // Forms:
     const loginForm = () => (
-        <Togglable buttonLabel="login">
+        <Togglable buttonLabel="Login">
             <LoginForm login={login} />
         </Togglable>
     )
@@ -117,7 +109,7 @@ const App = () => {
         <div>
             <form onSubmit={handleLogout}>
                 {user.realname} logged in&nbsp;
-                <button type="submit">logout</button>
+                <button type="submit">Logout</button>
             </form>
         </div>
     )
@@ -138,10 +130,7 @@ const App = () => {
             <Notification />
             <div>{menu()}</div>
             <Routes>
-                <Route
-                    path="/"
-                    element={<ListBlogs deleteBlog={deleteBlog} />}
-                />
+                <Route path="/" element={<ListBlogs />} />
                 <Route
                     path="/blogs/:id"
                     element={<BlogInfo blogs={blogs} addLike={addLike} />}

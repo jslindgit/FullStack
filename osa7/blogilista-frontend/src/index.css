@@ -1,6 +1,51 @@
-h1 {
-	color: rgb(97, 0, 0);
+body {
+	background-color: rgb(255, 255, 255);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	padding-left: 10%;
+	padding-right: 10%;
+}
+
+h1, h2, h3 {
+	color: rgb(100, 0, 0);
 	font-style: italic;
+}
+
+a, a:visited {
+	text-decoration: none !important;
+	color:rgb(120, 0, 0)
+}
+
+a:hover {
+	color: rgb(200, 0, 0)
+}
+
+a:active {
+	color: rgb(80, 0, 0)
+}
+
+button {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 5px;
+	background-color: rgb(240, 235, 230);
+	margin: 3px;
+}
+
+button:hover {
+	background-color: rgb(250, 245, 240);
+}
+
+button:active {
+	background-color: rgb(220, 215, 205);
+}
+
+input {
+	padding: 10px;
+	border-color: rgb(205, 200, 200);
+	background-color: rgb(255, 250, 235);
+	margin: 3px;
 }
 
 .notification {
@@ -8,7 +53,7 @@ h1 {
 	background: rgb(241, 255, 234);
 	font-size: 20px;
 	border-style: solid;
-	border-radius: 5px;
+	border-radius: 15px;
 	padding: 10px;
 	margin-bottom: 10px;
 }
@@ -18,7 +63,7 @@ h1 {
 	background: rgb(255, 210, 190);
 	font-size: 20px;
 	border-style: solid;
-	border-radius: 5px;
+	border-radius: 15px;
 	padding: 10px;
 	margin-bottom: 10px;
 }
@@ -26,11 +71,21 @@ h1 {
 .blog {
 	padding: 10px;
 	border-style: solid;
-	border-width: 1px;
-	margin-bottom: 5px;
+	border-width: 3px;
+	border-radius: 10px;
+	border-color: rgb(100, 0, 0);	
+	margin-bottom: 9px;
+}
+
+.blog:hover {
+	background:rgb(255, 250, 235)
 }
 
 .menu {
-	padding: 10px;
-	background: rgb(225, 225, 230);
+	padding: 15px;
+	border-style: solid;
+	border-width: 5px;
+	border-color: rgb(120, 110, 100);
+	border-radius: 15px;
+	background: rgb(235, 230, 225);
 }

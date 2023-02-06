@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import { setNotification } from '../reducers/notificationReducer'
+import { addBlog } from '../reducers/blogsReducer'
 import blogService from '../services/blogs'
 
 const CreateBlogForm = () => {
@@ -10,14 +11,14 @@ const CreateBlogForm = () => {
 
     const dispatch = useDispatch()
 
-    const createBlog = async ({ title, author, url }) => {
+    const createBlog = async () => {
         const addedBlog = await blogService.create({ title, author, url })
         dispatch(addBlog(addedBlog))
     }
 
-    const addBlog = (event) => {
+    const submitBlog = (event) => {
         event.preventDefault()
-        createBlog({ title, author, url })
+        createBlog()
 
         dispatch(setNotification('You added a new blog: ' + title, 5))
 
@@ -28,40 +29,58 @@ const CreateBlogForm = () => {
 
     return (
         <div>
-            <h2>create new</h2>
-            <form onSubmit={addBlog}>
+            <h2>Create new</h2>
+            <form onSubmit={submitBlog}>
                 <div>
-                    title: &nbsp;
-                    <input
-                        type="text"
-                        value={title}
-                        name="Title"
-                        onChange={({ target }) => setTitle(target.value)}
-                        id="input-title"
-                    />
-                </div>
-                <div>
-                    author: &nbsp;
-                    <input
-                        type="text"
-                        value={author}
-                        name="Author"
-                        onChange={({ target }) => setAuthor(target.value)}
-                        id="input-author"
-                    />
-                </div>
-                <div>
-                    url: &nbsp;
-                    <input
-                        type="text"
-                        value={url}
-                        name="URL"
-                        onChange={({ target }) => setUrl(target.value)}
-                        id="input-url"
-                    />
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Title: &nbsp;</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        name="Title"
+                                        onChange={({ target }) =>
+                                            setTitle(target.value)
+                                        }
+                                        id="input-title"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Author: &nbsp;</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        value={author}
+                                        name="Author"
+                                        onChange={({ target }) =>
+                                            setAuthor(target.value)
+                                        }
+                                        id="input-author"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>URL: &nbsp;</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        value={url}
+                                        name="URL"
+                                        onChange={({ target }) =>
+                                            setUrl(target.value)
+                                        }
+                                        id="input-url"
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <button id="button-create" type="submit">
-                    create
+                    Create
                 </button>
             </form>
         </div>
