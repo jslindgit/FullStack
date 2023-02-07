@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Reducers:
-import { initializeBlogs, setBlogs } from './reducers/blogsReducer'
+import { initializeBlogs } from './reducers/blogsReducer'
 import { setUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 
