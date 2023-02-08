@@ -1,0 +1,127 @@
+body {
+	background-color: rgb(255, 255, 255);
+	font-size: 18px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	padding-left: 10%;
+	padding-right: 10%;
+}
+
+h1, h2, h3 {
+	color: rgb(100, 0, 0);
+	font-style: italic;
+	text-transform: capitalize;
+}
+
+a, a:visited {
+	text-decoration: none !important;
+	color:rgb(120, 0, 0)
+}
+
+a:hover {
+	color: rgb(200, 0, 0)
+}
+
+a:active {
+	color: rgb(80, 0, 0)
+}
+
+button {
+	padding-top: 8px;
+	padding-bottom: 7px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-color: black;
+	border-style: solid;
+	border-radius: 5px;
+	background-color: rgb(240, 235, 230);
+	margin-bottom: 6px;
+	margin-right: 9px;
+	font-size: 18px;
+	text-transform: capitalize;
+}
+
+button:hover {
+	background-color: rgb(250, 245, 240);
+}
+
+button:active {
+	background-color: rgb(220, 215, 205);
+}
+
+form {
+	font-size: 20px;
+	text-transform: capitalize;
+}
+
+input {
+	font-size: 16px;
+	padding: 9px;
+	border-color: rgb(205, 200, 200);
+	background-color: rgb(255, 250, 235);
+	margin-right: 9px;
+	margin-bottom: 9px;
+}
+
+table {
+	border-spacing: 0px;
+}
+
+th, td {
+	padding: 9px;
+	padding-left: 27px;
+	padding-right: 27px;
+	margin: 0px;
+	text-align: left;
+}
+
+tr:nth-child(even) {
+	background-color: rgb(240, 235, 230);
+}
+
+.notification {
+	color: rgb(0, 128, 0);
+	background: rgb(241, 255, 234);
+	font-size: 20px;
+	border-style: solid;
+	border-radius: 15px;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.error {
+	color:rgb(180, 0, 0);
+	background: rgb(255, 200, 190);
+	font-size: 20px;
+	border-style: solid;
+	border-radius: 15px;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.blog {
+	padding: 10px;
+	background: rgb(245, 240, 235);
+	border-style: solid;
+	border-width: 3px;
+	border-radius: 10px;
+	border-color: rgb(100, 0, 0);	
+	margin-bottom: 9px;
+}
+
+.blog:hover {
+	background:rgb(255, 250, 235)
+}
+
+.blog:active {
+	background:rgb(255, 253, 245)
+}
+
+.menu {
+	padding: 15px;
+	border-style: solid;
+	border-width: 5px;
+	border-color: rgb(120, 110, 100);
+	border-radius: 15px;
+	background: rgb(235, 230, 225);
+	font-size: 20px;
+}
