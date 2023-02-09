@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
-import { ALL_AUTHORS, SET_BIRTHYEAR } from '../queries'
+import { ALL_AUTHORS, SET_BIRTHYEAR } from '../misc/queries'
 
 const Authors = (props) => {
     const result = useQuery(ALL_AUTHORS)
@@ -23,13 +23,15 @@ const Authors = (props) => {
     } else {
         authors = result.data.allAuthors
         if (initBorn === false && authors.length > 0) {
-            setBorn(authors[0].born)
+            setBorn(authors[0].born ? authors[0].born : 1900)
+            setSelectedAuthor(authors[0].name)
             setInitBorn(true)
         }
     }
 
     const submit = async (event) => {
         event.preventDefault()
+        console.log('selectedAuthor', selectedAuthor)
         setBirthYear({
             variables: { name: selectedAuthor, year: Number(born) },
         })

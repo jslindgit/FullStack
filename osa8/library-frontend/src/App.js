@@ -21,6 +21,7 @@ const App = () => {
                     <tr>
                         <td>
                             <div align="center">
+                                <h1>Library App</h1>
                                 <button onClick={() => setPage('authors')}>
                                     authors
                                 </button>

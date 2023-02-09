@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { ADD_BOOK, ALL_BOOKS } from '../queries'
+import { ADD_BOOK, ALL_BOOKS } from '../misc/queries'
 
 const NewBook = (props) => {
     const [title, setTitle] = useState('')
@@ -41,25 +41,26 @@ const NewBook = (props) => {
             <h2>Add book</h2>
             <form onSubmit={submit}>
                 <div>
-                    title&ensp;
+                    Title:&nbsp;&nbsp;&nbsp;&nbsp;&ensp;
                     <input
                         value={title}
                         onChange={({ target }) => setTitle(target.value)}
                     />
                 </div>
                 <div>
-                    author&ensp;
+                    Author:&nbsp;&nbsp;&nbsp;&ensp;
                     <input
                         value={author}
                         onChange={({ target }) => setAuthor(target.value)}
                     />
                 </div>
                 <div>
-                    published&ensp;
+                    Published:&ensp;
                     <input
                         type="number"
                         value={published}
                         onChange={({ target }) => setPublished(target.value)}
+                        style={{ width: '80px' }}
                     />
                 </div>
                 <div>
