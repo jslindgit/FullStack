@@ -13,6 +13,9 @@ const Books = (props) => {
     if (result.loading) {
         return <div>Loading...</div>
     } else {
+        if (!result || !result.data) {
+            return null
+        }
         books = result.data.allBooks
     }
 
