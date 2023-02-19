@@ -1,18 +1,55 @@
 import './index.css'
 
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 // Components:
 import Authors from './components/Authors'
 import Books from './components/Books'
+import Login from './components/Login'
 import NewBook from './components/NewBook'
+import Menu from './components/Menu'
+import Recommendations from './components/Recommendations'
+
+// Apollo:
+import { useApolloClient } from '@apollo/client'
+import { useQuery } from '@apollo/client'
+import { ME } from './misc/queries'
 
 const App = () => {
+    const [token, setToken] = useState(null)
+    const [user, setUser] = useState('')
+    const [favoriteGenre, setFavoriteGenre] = useState('')
+
     useEffect(() => {
         document.title = 'Library'
     }, [])
 
-    const [page, setPage] = useState('authors')
+    useEffect(() => {
+        if (!token && localStorage.getItem('library-user-token')) {
+            setToken(localStorage.getItem('library-user-token'))
+        }
+    })
+
+    const client = useApolloClient()
+
+    const logout = () => {
+        setToken(null)
+        localStorage.clear()
+        client.resetStore()
+    }
+
+    // User:
+    const result = useQuery(ME, {
+        skip: !localStorage.getItem('library-user-token'),
+    })
+
+    if (result.loading) {
+        return <div>Loading...</div>
+    } else if (user == '' && result && result.data && result.data.me) {
+        setUser(result.data.me.username)
+        setFavoriteGenre(result.data.me.favoriteGenre)
+    }
 
     return (
         <div>
@@ -22,19 +59,32 @@ const App = () => {
                         <td>
                             <div align="center">
                                 <h1>Library App</h1>
-                                <button onClick={() => setPage('authors')}>
-                                    authors
-                                </button>
-                                <button onClick={() => setPage('books')}>
-                                    books
-                                </button>
-                                <button onClick={() => setPage('add book')}>
-                                    add book
-                                </button>
+                                <Menu
+                                    isLoggedIn={token}
+                                    logout={logout}
+                                    user={user}
+                                />
+                                <Routes>
+                                    <Route path="/" element={<Authors />} />
+                                    <Route path="/books" element={<Books />} />
+                                    <Route
+                                        path="/addbook"
+                                        element={<NewBook />}
+                                    />
+                                    <Route
+                                        path="/login"
+                                        element={<Login setToken={setToken} />}
+                                    />
+                                    <Route
+                                        path="/recommendations"
+                                        element={
+                                            <Recommendations
+                                                favoriteGenre={favoriteGenre}
+                                            />
+                                        }
+                                    />
+                                </Routes>
                             </div>
-                            <Authors show={page === 'authors'} />
-                            <Books show={page === 'books'} />
-                            <NewBook show={page === 'add book'} />
                         </td>
                     </tr>
                 </tbody>

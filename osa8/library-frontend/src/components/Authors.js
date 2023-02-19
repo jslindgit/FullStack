@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ALL_AUTHORS, SET_BIRTHYEAR } from '../misc/queries'
 
-const Authors = (props) => {
+const Authors = () => {
     const result = useQuery(ALL_AUTHORS)
 
     const [setBirthYear] = useMutation(SET_BIRTHYEAR, {
@@ -12,10 +12,6 @@ const Authors = (props) => {
     const [selectedAuthor, setSelectedAuthor] = useState('')
     const [born, setBorn] = useState(1900)
     const [initBorn, setInitBorn] = useState(false)
-
-    if (!props.show) {
-        return null
-    }
 
     let authors = []
     if (result.loading) {
@@ -31,9 +27,11 @@ const Authors = (props) => {
 
     const submit = async (event) => {
         event.preventDefault()
-        console.log('selectedAuthor', selectedAuthor)
+
         setBirthYear({
             variables: { name: selectedAuthor, year: Number(born) },
+        }).catch((error) => {
+            console.log('setBirthYear error:', error.graphQLErrors[0].message)
         })
     }
 
@@ -46,7 +44,7 @@ const Authors = (props) => {
     return (
         <div>
             <h2>authors</h2>
-            <table>
+            <table className="striped">
                 <tbody>
                     <tr>
                         <th>Name</th>

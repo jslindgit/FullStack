@@ -61,7 +61,13 @@ input, select {
 	background-color: rgb(255, 250, 235);
 	margin-right: 9px;
 	margin-bottom: 9px;
+	margin-top: 9px;
 	width: 300px;
+}
+
+option {
+	text-transform: capitalize;
+	font-size: 18px;
 }
 
 table {
@@ -86,28 +92,8 @@ td:last-child {
 	border-bottom-right-radius: 10px;
 }
 
-tr:nth-child(even) {
+.striped tr:nth-child(even) {
 	background-color: rgb(240, 235, 230);
-}
-
-.notification {
-	color: rgb(0, 128, 0);
-	background: rgb(241, 255, 234);
-	font-size: 20px;
-	border-style: solid;
-	border-radius: 15px;
-	padding: 10px;
-	margin-bottom: 10px;
-}
-
-.error {
-	color:rgb(180, 0, 0);
-	background: rgb(255, 200, 190);
-	font-size: 20px;
-	border-style: solid;
-	border-radius: 15px;
-	padding: 10px;
-	margin-bottom: 10px;
 }
 
 .blog {
@@ -128,12 +114,41 @@ tr:nth-child(even) {
 	background:rgb(255, 253, 245)
 }
 
-.menu {
-	padding: 15px;
+.capFirst {
+	text-transform: capitalize;
+}
+
+.error {
+	color:rgb(180, 0, 0);
+	background: rgb(255, 200, 190);
+	font-size: 20px;
 	border-style: solid;
-	border-width: 5px;
-	border-color: rgb(120, 110, 100);
+	border-radius: 15px;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.menu {
+	width: 600px;
+	padding: 15px;		
+	border-style: solid;
+	border-width: 4px;
+	border-color: rgb(100, 0, 0);
 	border-radius: 15px;
 	background: rgb(235, 230, 225);
+	font-size: 24px;	
+}
+
+.notification {
+	color: rgb(0, 128, 0);
+	background: rgb(241, 255, 234);
 	font-size: 20px;
+	border-style: solid;
+	border-radius: 15px;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.smallText {
+	font-size: 18px !important;
 }

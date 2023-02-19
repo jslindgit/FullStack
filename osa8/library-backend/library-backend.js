@@ -152,7 +152,9 @@ const resolvers = {
 
             try {
                 await book.save()
+                console.log('New Book saved:', book)
             } catch (error) {
+                console.log(error)
                 throw new GraphQLError('Saving Book failed', {
                     extensions: {
                         code: 'BAD_USER_INPUT',
@@ -216,7 +218,7 @@ const resolvers = {
 
             const userForToken = {
                 username: user.username,
-                _id: user.id,
+                id: user.id,
             }
 
             return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
