@@ -4,16 +4,14 @@ import BookList from './BookList'
 
 const Recommendations = ({ favoriteGenre }) => {
     let books = []
-    const result = useQuery(ALL_BOOKS)
+    const result = useQuery(ALL_BOOKS, {
+        variables: { genre: favoriteGenre },
+    })
 
     if (result.loading) {
         return <div>Loading...</div>
     } else {
-        books = result.data.allBooks.filter((b) =>
-            b.genres
-                .map((g) => g.toLowerCase())
-                .includes(favoriteGenre.toLowerCase())
-        )
+        books = result.data.allBooks
     }
 
     return (
@@ -26,7 +24,9 @@ const Recommendations = ({ favoriteGenre }) => {
                 </b>
                 :
             </p>
-            <div>{books.length > 0 ? <BookList books={books} /> : '-'}</div>
+            <div>
+                {books.length > 0 ? <BookList books={books} /> : 'No matches'}
+            </div>
         </div>
     )
 }

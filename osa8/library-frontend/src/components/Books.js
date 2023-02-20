@@ -1,43 +1,41 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../misc/queries'
+import { ALL_BOOKS, ALL_GENRES } from '../misc/queries'
 import BookList from './BookList'
 
 const Books = () => {
     const [genreFilter, setGenreFilter] = useState('All Genres')
-    const [genreSelectInit, setGenreSelectInit] = useState(false)
 
-    const result = useQuery(ALL_BOOKS)
+    const allGenresResponse = useQuery(ALL_GENRES)
+    const { data, loading, refetch } = useQuery(ALL_BOOKS, {
+        variables: { genre: genreFilter !== 'All Genres' ? genreFilter : '' },
+    })
 
     let books = []
     let genres = ['All Genres']
 
-    if (result.loading) {
+    if (allGenresResponse.loading) {
         return <div>Loading...</div>
     } else {
-        if (!result || !result.data) {
-            return null
-        }
-        books =
-            genreFilter === 'All Genres'
-                ? result.data.allBooks
-                : result.data.allBooks.filter((b) =>
-                      b.genres
-                          .map((g) => g.toLowerCase())
-                          .includes(genreFilter.toLowerCase())
-                  )
-
-        result.data.allBooks.forEach((b) => {
-            b.genres.forEach((g) => {
-                if (!genres.includes(g.toLowerCase())) {
-                    genres = genres.concat(g.toLowerCase())
-                }
-            })
+        allGenresResponse.data.allGenres.forEach((g) => {
+            if (!genres.includes(g.toLowerCase())) {
+                genres = genres.concat(g.toLowerCase())
+            }
         })
     }
 
-    const setGenre = (event) => {
+    if (loading) {
+        return <div>Loading...</div>
+    } else {
+        if (!data) {
+            return null
+        }
+        books = data.allBooks
+    }
+
+    const setGenre = async (event) => {
         event.preventDefault()
+        refetch()
         setGenreFilter(event.target.value)
     }
 
