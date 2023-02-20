@@ -71,7 +71,7 @@ const NewBook = () => {
                         add genre
                     </button>
                 </div>
-                <div>genres: {genres.join(' ')}</div>
+                <div>genres: {genres.join(', ')}</div>
                 <p>
                     <button type="submit">create book</button>
                 </p>

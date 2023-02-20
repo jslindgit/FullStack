@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS, ALL_GENRES } from '../misc/queries'
 import BookList from './BookList'
@@ -11,31 +11,27 @@ const Books = () => {
         variables: { genre: genreFilter !== 'All Genres' ? genreFilter : '' },
     })
 
+    useEffect(() => {
+        refetch()
+    }, [genreFilter])
+
     let books = []
     let genres = ['All Genres']
 
     if (allGenresResponse.loading) {
         return <div>Loading...</div>
     } else {
-        allGenresResponse.data.allGenres.forEach((g) => {
-            if (!genres.includes(g.toLowerCase())) {
-                genres = genres.concat(g.toLowerCase())
-            }
-        })
+        genres = genres.concat(allGenresResponse.data.allGenres)
     }
 
-    if (loading) {
+    if (loading || !data) {
         return <div>Loading...</div>
     } else {
-        if (!data) {
-            return null
-        }
         books = data.allBooks
     }
 
     const setGenre = async (event) => {
         event.preventDefault()
-        refetch()
         setGenreFilter(event.target.value)
     }
 
@@ -43,7 +39,12 @@ const Books = () => {
         <div>
             <h2>Books</h2>
             <b>In genre:</b>{' '}
-            <select name="genreSelect" onChange={setGenre} className="capFirst">
+            <select
+                name="genreSelect"
+                onChange={setGenre}
+                className="capFirst"
+                value={genreFilter}
+            >
                 {genres.map((g) => (
                     <option key={g} value={g}>
                         {g}
