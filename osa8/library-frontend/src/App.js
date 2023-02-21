@@ -12,9 +12,8 @@ import Menu from './components/Menu'
 import Recommendations from './components/Recommendations'
 
 // Apollo:
-import { useApolloClient } from '@apollo/client'
-import { useQuery } from '@apollo/client'
-import { ME } from './misc/queries'
+import { useQuery, useApolloClient, useSubscription } from '@apollo/client'
+import { ALL_BOOKS, ME, BOOK_ADDED } from './misc/queries'
 
 const App = () => {
     const [token, setToken] = useState(null)
@@ -32,6 +31,15 @@ const App = () => {
     })
 
     const client = useApolloClient()
+
+    useSubscription(BOOK_ADDED, {
+        onData: ({ data }) => {
+            const bookAdded = data.data.bookAdded
+            window.alert(
+                `New Book Added: ${bookAdded.title} by ${bookAdded.author.name}`
+            )
+        },
+    })
 
     const logout = () => {
         setToken(null)
@@ -65,7 +73,10 @@ const App = () => {
                                     user={user}
                                 />
                                 <Routes>
-                                    <Route path="/" element={<Authors />} />
+                                    <Route
+                                        path="/"
+                                        element={<Authors isLoggedIn={token} />}
+                                    />
                                     <Route path="/books" element={<Books />} />
                                     <Route
                                         path="/addbook"

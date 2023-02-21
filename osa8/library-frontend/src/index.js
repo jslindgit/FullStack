@@ -29,9 +29,11 @@ const httpLink = createHttpLink({
     uri: 'http://localhost:4000',
 })
 
-const wsLink = new GraphQLWsLink({
-    url: 'ws://localhost:4000',
-})
+const wsLink = new GraphQLWsLink(
+    createClient({
+        url: 'ws://localhost:4000',
+    })
+)
 
 const splitLink = split(
     ({ query }) => {

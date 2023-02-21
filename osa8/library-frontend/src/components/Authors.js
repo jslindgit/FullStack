@@ -1,9 +1,9 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation, useQuery, useSubscription } from '@apollo/client'
 import { useState } from 'react'
-import { ALL_AUTHORS, SET_BIRTHYEAR } from '../misc/queries'
+import { ALL_AUTHORS, SET_BIRTHYEAR, BOOK_ADDED } from '../misc/queries'
 
-const Authors = () => {
-    const result = useQuery(ALL_AUTHORS)
+const Authors = ({ isLoggedIn }) => {
+    const { data, loading, refetch } = useQuery(ALL_AUTHORS)
 
     const [setBirthYear] = useMutation(SET_BIRTHYEAR, {
         refetchQueries: [{ query: ALL_AUTHORS }],
@@ -13,11 +13,17 @@ const Authors = () => {
     const [born, setBorn] = useState(1900)
     const [initBorn, setInitBorn] = useState(false)
 
+    useSubscription(BOOK_ADDED, {
+        onData: () => {
+            refetch()
+        },
+    })
+
     let authors = []
-    if (result.loading) {
+    if (loading) {
         return <div>Loading...</div>
     } else {
-        authors = result.data.allAuthors
+        authors = data.allAuthors
         if (initBorn === false && authors.length > 0) {
             setBorn(authors[0].born ? authors[0].born : 1900)
             setSelectedAuthor(authors[0].name)
@@ -33,6 +39,34 @@ const Authors = () => {
         }).catch((error) => {
             console.log('setBirthYear error:', error.graphQLErrors[0].message)
         })
+    }
+
+    const setBirthYearForm = () => {
+        return (
+            <>
+                <h2>Set birthyear</h2>
+                <form onSubmit={submit}>
+                    <select
+                        name="bornSelect"
+                        value={selectedAuthor}
+                        onChange={setSelected}
+                    >
+                        {authors.map((a) => (
+                            <option key={a.name} value={a.name}>
+                                {a.name}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        type="number"
+                        style={{ width: '80px' }}
+                        value={born}
+                        onChange={({ target }) => setBorn(target.value)}
+                    />
+                    <button type="submit">Set</button>
+                </form>
+            </>
+        )
     }
 
     const setSelected = (event) => {
@@ -60,27 +94,7 @@ const Authors = () => {
                     ))}
                 </tbody>
             </table>
-            <h2>Set birthyear</h2>
-            <form onSubmit={submit}>
-                <select
-                    name="bornSelect"
-                    value={selectedAuthor}
-                    onChange={setSelected}
-                >
-                    {authors.map((a) => (
-                        <option key={a.name} value={a.name}>
-                            {a.name}
-                        </option>
-                    ))}
-                </select>
-                <input
-                    type="number"
-                    style={{ width: '80px' }}
-                    value={born}
-                    onChange={({ target }) => setBorn(target.value)}
-                />
-                <button type="submit">Set</button>
-            </form>
+            {isLoggedIn ? setBirthYearForm() : null}
         </div>
     )
 }

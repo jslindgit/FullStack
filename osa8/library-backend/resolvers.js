@@ -15,9 +15,12 @@ const resolvers = {
             let byAuthor
             if (args.author) {
                 const author = await Author.findOne({ name: args.author })
+                console.log('Author.findOne 1')
                 byAuthor = await Book.find({ author: author.id })
+                console.log('Book.find 1')
             } else {
                 byAuthor = await Book.find({})
+                console.log('Book.find 2')
             }
             return args.genre
                 ? byAuthor.filter((b) =>
@@ -29,10 +32,12 @@ const resolvers = {
         },
         allAuthors: async () => {
             const allAuthors = await Author.find({})
+            console.log('Author.find 1')
             return allAuthors
         },
         allGenres: async () => {
             const books = await Book.find({})
+            console.log('Book.find 3')
             let genres = []
             books.forEach((b) => {
                 b.genres.forEach((g) => {
@@ -50,15 +55,13 @@ const resolvers = {
     Author: {
         name: (root) => root.name,
         born: (root) => root.born,
-        bookCount: async (root) => {
-            const books = await Book.find({ author: root.id })
-            return books.length
-        },
+        bookCount: (root) => root.books.length,
         id: (root) => root.id,
     },
     Book: {
         author: async (root) => {
             const a = await Author.findById(root.author)
+            console.log('Author.findById 1')
             return a
         },
     },
@@ -93,7 +96,7 @@ const resolvers = {
                 await book.save()
                 console.log('New Book saved:', book)
             } catch (error) {
-                console.log(error)
+                console.log('Error at addBook -> book.save():', error)
                 throw new GraphQLError('Saving Book failed', {
                     extensions: {
                         code: 'BAD_USER_INPUT',
@@ -101,6 +104,13 @@ const resolvers = {
                         error,
                     },
                 })
+            }
+
+            author.books = author.books.concat(book)
+            try {
+                await author.save()
+            } catch (error) {
+                console.log('Error at addBook -> author.save():', error)
             }
 
             pubsub.publish('BOOK_ADDED', { bookAdded: book })

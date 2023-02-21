@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS, ALL_GENRES } from '../misc/queries'
+import { useQuery, useSubscription } from '@apollo/client'
+import { ALL_BOOKS, ALL_GENRES, BOOK_ADDED } from '../misc/queries'
 import BookList from './BookList'
 
 const Books = () => {
@@ -14,6 +14,12 @@ const Books = () => {
     useEffect(() => {
         refetch()
     }, [genreFilter])
+
+    useSubscription(BOOK_ADDED, {
+        onData: () => {
+            refetch()
+        },
+    })
 
     let books = []
     let genres = ['All Genres']

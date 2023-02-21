@@ -1,17 +1,23 @@
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../misc/queries'
+import { useQuery, useSubscription } from '@apollo/client'
+import { ALL_BOOKS, BOOK_ADDED } from '../misc/queries'
 import BookList from './BookList'
 
 const Recommendations = ({ favoriteGenre }) => {
     let books = []
-    const result = useQuery(ALL_BOOKS, {
+    const { data, loading, refetch } = useQuery(ALL_BOOKS, {
         variables: { genre: favoriteGenre },
     })
 
-    if (result.loading) {
+    useSubscription(BOOK_ADDED, {
+        onData: () => {
+            refetch()
+        },
+    })
+
+    if (loading) {
         return <div>Loading...</div>
     } else {
-        books = result.data.allBooks
+        books = data.allBooks
     }
 
     return (
