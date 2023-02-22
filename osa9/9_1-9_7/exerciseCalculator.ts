@@ -24,7 +24,7 @@ const parsedArgs = (args: string[]): ExerciseValues => {
         if (isNaN(Number(value))) {
             throw new Error('Parameter "' + value + '" is not a number!');
         }
-        if (index === 0) { 
+        if (index === 2) { 
             target = Number(value);
         } else {
             hours.push(Number(value));
@@ -37,7 +37,7 @@ const parsedArgs = (args: string[]): ExerciseValues => {
     }
 }
 
-const calculateExercises = (hours: Array<number>, target: number): ExerciseResult => {
+const calculateExercises = (hours: Array<number>, target: number): ExerciseResult => {    
     const average = hours.reduce((partial, a) => partial + a, 0) / hours.length
     let rating: number;
     if (average < target * 0.8) {
@@ -55,7 +55,7 @@ const calculateExercises = (hours: Array<number>, target: number): ExerciseResul
     }
     else {
         desc = 'Good';
-    }
+    }    
     return {
         periodLength: hours.length,
         trainingDays: hours.filter(h => h > 0).length,
