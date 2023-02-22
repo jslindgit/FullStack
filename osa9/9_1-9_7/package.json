@@ -1,13 +1,17 @@
 {
-  "name": "9_1-9_7",
-  "version": "1.0.0",
-  "description": "Fullstack",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-	"ts-node": "ts-node",
-	"calculateBmi": "npm run ts-node -- bmiCalculator.ts"
-  },
-  "author": "Joonas Lindstedt",
-  "license": "ISC"
+    "name": "9_1-9_7",
+    "version": "1.0.0",
+    "description": "Fullstack",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "ts-node": "ts-node",
+        "calculateBmi": "ts-node bmiCalculator.ts",
+        "exerciseCalculator": "ts-node exerciseCalculator.ts"
+    },
+    "author": "Joonas Lindstedt",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^18.14.0"
+    }
 }
