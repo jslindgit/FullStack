@@ -15,6 +15,10 @@ app.get('/api/ping', (_req, res) => {
 	res.status(200).send('pong');
 });
 
+app.get('/api/patients', (_req, res) => {
+	res.status(200).end();
+});
+
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
