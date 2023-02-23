@@ -11,14 +11,14 @@ const parsedArguments = (args: string[]): BmiValues => {
 		return {
 			heightCm: Number(args[2]),
 			weightKg: Number(args[3])
-		}
+		};
 	}
 	else {
 		throw new Error('Provided values are not numbers!');
 	}
-}
+};
 
-const calculateBmi = (heightCm: number, weightKg: number): string => {	
+export const calculateBmi = (heightCm: number, weightKg: number): string => {	
 	const bmi = weightKg / Math.pow(heightCm / 100, 2);
 	if (bmi <= 16) {
 		return 'Underweight (Severe thinness)';
@@ -44,11 +44,11 @@ const calculateBmi = (heightCm: number, weightKg: number): string => {
 	else {
 		return 'Obese (Class III)';
 	}
-}
+};
 
 try {
-	const { heightCm, weightKg } = parsedArguments(process.argv)
-	console.log(calculateBmi(heightCm, weightKg))
+	const { heightCm, weightKg } = parsedArguments(process.argv);
+	console.log(calculateBmi(heightCm, weightKg));
 } catch (error: unknown) {
 	let errorMessage = 'Something bad happened.';
 	if (error instanceof Error) {
@@ -56,5 +56,3 @@ try {
 	}
 	console.log(errorMessage);
 }
-
-export default calculateBmi

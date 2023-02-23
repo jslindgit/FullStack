@@ -15,9 +15,9 @@ interface ExerciseValues {
 
 const parsedArgs = (args: string[]): ExerciseValues => {
     if (args.length < 4) throw new Error('Not enough parameters.');
-
-    let target: number;
-    let hours: number[] = [];
+    
+    let target = 0;
+    const hours: number[] = [];
     
     args.forEach((value, index) => {
         if (index < 2) return;
@@ -29,16 +29,16 @@ const parsedArgs = (args: string[]): ExerciseValues => {
         } else {
             hours.push(Number(value));
         }
-    })
+    });
 
     return {        
         target: target,
         hours: hours
-    }
-}
+    };
+};
 
-const calculateExercises = (hours: Array<number>, target: number): ExerciseResult => {    
-    const average = hours.reduce((partial, a) => partial + a, 0) / hours.length
+export const calculateExercises = (hours: Array<number>, target: number): ExerciseResult => {    
+    const average = hours.reduce((partial, a) => partial + a, 0) / hours.length;
     let rating: number;
     if (average < target * 0.8) {
         rating = 1;
@@ -64,8 +64,8 @@ const calculateExercises = (hours: Array<number>, target: number): ExerciseResul
         ratingDescription: desc,
         target: target,
         average: average
-    }
-}
+    };
+};
 
 try {
     const { target, hours } = parsedArgs(process.argv);
@@ -75,6 +75,6 @@ try {
     if (error instanceof Error) {
         errorMessage += ' Error: ' + error.message;        
     }
-    console.log(errorMessage)
+    console.log(errorMessage);
 }
 //console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
