@@ -4,10 +4,10 @@ import AddPatientForm from "./AddPatientForm";
 import { PatientFormValues } from "../../types";
 
 interface Props {
-  modalOpen: boolean;
-  onClose: () => void;
-  onSubmit: (values: PatientFormValues) => void;
-  error?: string;
+	modalOpen: boolean;
+	onClose: () => void;
+	onSubmit: (values: PatientFormValues) => void;
+	error?: string;
 }
 
 const AddPatientModal = ({ modalOpen, onClose, onSubmit, error }: Props) => (
