@@ -4,14 +4,11 @@ import { DiaryEntry } from "./types";
 import { getAllEntries, createEntry } from "./services/entryService";
 
 import ViewEntry from "./components/ViewEntry";
+import NewEntryForm from "./components/NewEntryForm";
 
 const App = () => {
 	const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([]);
 	const [error, setError] = useState('');
-	const [date, setDate] = useState('');
-	const [weather, setWeather] = useState('');
-	const [visibility, setVisibility] = useState('');
-	const [comment, setComment] = useState('');
 	
 	useEffect(() => {
 		getAllEntries().then(data => {
@@ -19,17 +16,12 @@ const App = () => {
 		})
 	}, []);
 
-	const entryCreation = async (event: React.SyntheticEvent) => {
-		event.preventDefault();
+	const entryCreation = async (date: string, weather: string, visibility: string, comment: string): Promise<boolean> => {
 		try {
 			const newEntry = await createEntry({ date, weather, visibility, comment });
 			setDiaryEntries(diaryEntries.concat(newEntry));
-			
-			setDate('');
-			setWeather('');
-			setVisibility('');
-			setComment('');
 			setError('');
+			return true;
 		} catch (error: unknown) {
 			if (axios.isAxiosError(error) && error.response) {
 				setError(error.response.data);
@@ -37,6 +29,7 @@ const App = () => {
 			else {
 				setError('unknown error: ' + error);
 			}
+			return false;
 		}
 	}
 
@@ -44,18 +37,7 @@ const App = () => {
 		<div>
 			<h1>Add new entry</h1>
 			{error.length > 0 ? (<span style={{color: "red"}}>{error}<br /><br /></span>) : ''}
-			<form onSubmit={entryCreation}>
-				Date:{' '}<input value={date} onChange={(event) => setDate(event.target.value)} />
-				<br />
-				Weather:{' '}<input value={weather} onChange={(event) => setWeather(event.target.value)} />
-				<br />
-				Visibility:{' '}<input value={visibility} onChange={(event) => setVisibility(event.target.value)} />
-				<br />
-				Comment:{' '}<input value={comment} onChange={(event) => setComment(event.target.value)} />
-				<br />
-				<button type='submit'>Add</button>
-			</form>
-
+			<NewEntryForm entryCreation={entryCreation} />
 			<h1>Diary entries</h1>			
 			{diaryEntries.map(e => (
 				<ViewEntry key={e.id} entry={e} />
