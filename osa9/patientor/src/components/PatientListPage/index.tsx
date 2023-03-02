@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import axios from 'axios';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 import { PatientFormValues, Patient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
@@ -50,31 +52,34 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
 	return (
 		<div className="App">
 			<Box>
-			<Typography align="center" variant="h6">
-				Patient list
-			</Typography>
+				<Typography align="center" variant="h6">
+					Patient list
+				</Typography>
 			</Box>
 			<Table style={{ marginBottom: "1em" }}>
-			<TableHead>
-				<TableRow>
-				<TableCell>Name</TableCell>
-				<TableCell>Gender</TableCell>
-				<TableCell>Occupation</TableCell>
-				<TableCell>Health Rating</TableCell>
-				</TableRow>
-			</TableHead>
-			<TableBody>
-				{Object.values(patients).map((patient: Patient) => (
-				<TableRow key={patient.id}>
-					<TableCell>{patient.name}</TableCell>
-					<TableCell>{patient.gender}</TableCell>
-					<TableCell>{patient.occupation}</TableCell>
-					<TableCell>
-					<HealthRatingBar showText={false} rating={1} />
+				<TableHead>
+					<TableRow>
+					<TableCell>Name
 					</TableCell>
-				</TableRow>
-				))}
-			</TableBody>
+					<TableCell>Gender</TableCell>
+					<TableCell>Occupation</TableCell>
+					<TableCell>Health Rating</TableCell>
+					</TableRow>
+				</TableHead>
+				<TableBody>
+					{Object.values(patients).map((patient: Patient) => (
+						<TableRow key={patient.id}>
+							<TableCell>
+								<Link to={'/' + patient.id}>{patient.name}</Link>
+							</TableCell>
+							<TableCell>{patient.gender}</TableCell>
+							<TableCell>{patient.occupation}</TableCell>
+							<TableCell>
+							<HealthRatingBar showText={false} rating={1} />
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
 			</Table>
 			<AddPatientModal
 				modalOpen={modalOpen}
@@ -83,7 +88,7 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
 				onClose={closeModal}
 			/>
 			<Button variant="contained" onClick={() => openModal()}>
-			Add New Patient
+				Add New Patient
 			</Button>
 		</div>
 	);
