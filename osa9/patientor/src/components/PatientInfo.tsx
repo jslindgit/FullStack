@@ -34,10 +34,9 @@ const PatientInfo = (): JSX.Element => {
 			setResult(
 				<div>
 					<h3>{patient.name}{' '}{drawGender(patient.gender)}</h3>
-					SSN: {patient.ssn}
-					<br />					
-					<span className="material-icons">draw</span>
-					Occupation: {patient.occupation}
+					<b>SSN:</b> {patient.ssn}
+					<br />	
+					<b>Occupation:</b> {patient.occupation}
 				</div>
 			);			
 			setLoaded(true);
