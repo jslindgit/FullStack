@@ -34,7 +34,7 @@ const parseString = (value: unknown, fieldName: string): string => {
 	return value;
 };
 
-const toNewPatient = (object: unknown): NewPatient => { 
+const toNewPatient = (object: unknown): NewPatient => {
 	if (!object || typeof object !== 'object') {
 		throw new Error('Incorrect or missing data');
 	}
@@ -48,7 +48,7 @@ const toNewPatient = (object: unknown): NewPatient => {
 			occupation: parseString(object.occupation, 'occupation'),
 			entries: []
 		};
-	
+
 		return newPatient;
 	}
 
