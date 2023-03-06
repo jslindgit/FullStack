@@ -17,6 +17,7 @@ export interface Diagnosis {
 	latin?: string;
 }
 
+// Entries:
 interface BaseEntry {
 	id: string;
 	description: string;
@@ -51,6 +52,7 @@ interface HospitalEntry extends BaseEntry {
 	discharge: dischargeDate
 }
 
+// Patient:
 export interface Patient {
 	id: string;
 	name: string;
