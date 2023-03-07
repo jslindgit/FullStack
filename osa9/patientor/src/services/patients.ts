@@ -28,8 +28,18 @@ const create = async (object: PatientFormValues) => {
 	return data;
 };
 
+const addEntry = async (patientId: string, entry: object) => {
+	console.log('addEntry entry:', entry);
+	const { data } = await axios.post<object>(
+		apiBaseUrl + '/patients/' + patientId + '/entries',
+		entry
+	);
+
+	return data;
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
-  	getAll, getById, create
+	getAll, getById, create, addEntry
 };
 

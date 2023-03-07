@@ -27,12 +27,12 @@ const parseDate = (date: unknown): string => {
 	return date;
 };
 
-const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> =>  {
+const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> => {
 	if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
 		// we will just trust the data to be in correct form
 		return [] as Array<Diagnosis['code']>;
 	}
-  
+
 	return object.diagnosisCodes as Array<Diagnosis['code']>;
 };
 
@@ -116,32 +116,33 @@ export const toNewEntry = (object: unknown): NewEntry => {
 		};
 
 		switch (parseString(object.type, 'type')) {
-		case 'HealthCheck':
-			if ('healthCheckRating' in object) {
-				const newEntry: NewEntry = { ...baseData, type: 'HealthCheck', healthCheckRating: parseHealthCheckRating(object.healthCheckRating) };
-				return newEntry;
-			}
-			break;
-		case "OccupationalHealthcare":
-			if ('employerName' in object) {				
-				let newEntry: NewEntry = { ...baseData, type: 'OccupationalHealthcare', employerName: parseString(object.employerName, 'employerName') };
-				if ('sickLeave' in object) {
-					newEntry = { ...newEntry, sickLeave: parseSickLeave(object.sickLeave) };
-				}				
-				return newEntry;
-			}
-			break;
-		case "Hospital":
-			if ('discharge' in object) {
-				const newEntry: NewEntry = { ...baseData, type: 'Hospital', discharge: parseDischarge(object.discharge) };				
-				return newEntry;
-			}
-			break;
-		default:
-			throw new Error('Missing parameter \'type\'');
+			case 'HealthCheck':
+				if ('healthCheckRating' in object) {
+					const newEntry: NewEntry = { ...baseData, type: 'HealthCheck', healthCheckRating: parseHealthCheckRating(object.healthCheckRating) };
+					return newEntry;
+				}
+				break;
+			case "OccupationalHealthcare":
+				if ('employerName' in object) {
+					let newEntry: NewEntry = { ...baseData, type: 'OccupationalHealthcare', employerName: parseString(object.employerName, 'employerName') };
+					if ('sickLeave' in object) {
+						newEntry = { ...newEntry, sickLeave: parseSickLeave(object.sickLeave) };
+					}
+					return newEntry;
+				}
+				break;
+			case "Hospital":
+				if ('discharge' in object) {
+					const newEntry: NewEntry = { ...baseData, type: 'Hospital', discharge: parseDischarge(object.discharge) };
+					return newEntry;
+				}
+				break;
+			default:
+				throw new Error('Missing parameter \'type\'');
 		}
 	}
 
+	console.log('toNewEntry object:', object);
 	throw new Error('Incorrect data for NewEntry!');
 };
 
