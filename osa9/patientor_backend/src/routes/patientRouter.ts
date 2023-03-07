@@ -1,6 +1,7 @@
 import express from 'express';
 import patientService from '../services/patientService';
 import toNewPatient from '../utils';
+import { toNewEntry } from '../utils';
 import { v4 as uuid } from 'uuid';
 
 const router = express.Router();
@@ -28,36 +29,12 @@ router.post('/', (req, res) => {
 router.post('/:id/entries', (req, res) => {
 	const patient = patientService.getPatientById(req.params.id);
 	if (!patient) {
-		res.status(404).end();
+		res.status(404).json({ Error: 'Cannot find a Patient with the id ' + req.params.id });
 	} else {
-		const body = req.body;
-		if (!body || !body.type || !body.description || !body.date || !body.specialist || !body.diagnosisCodes) {
-			res.status(400).json({ Error: "Missing or invalid parameters (for BaseEntry)" })
-		}
-		switch (body.type) {
-			case "HealthCheck":
-				if (!body.healthCheckRating) {
-					res.status(400).json({ Error: "Missing or invalid parameters (for HealthCheckEntry)" });
-				}
-				break;
-			case "OccupationalHealthcare":
-				if (!body.employerName) {
-					res.status(400).json({ Error: "Missing or invalid parameters (for OccupationalHealthcareEntry)" });
-				}
-				break;
-			case "Hospital":
-				if (!body.discharge) {
-					res.status(400).json({ Error: "Missing or invalid parameters (for HospitalEntry)" });
-				}
-				break;
-			default:
-				throw new Error('Missing parameter \'type\'');
-		}
-
-		const id = uuid();
-		patient.entries = patient.entries.concat({ ...body, id: id });
+		const newEntry = toNewEntry(req.body);
+		patient.entries = patient.entries.concat({ ...newEntry, id: uuid() });
 		res.json(patient);
 	}
-})
+});
 
 export default router;
