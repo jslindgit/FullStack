@@ -31,9 +31,9 @@ router.post('/:id/entries', (req, res) => {
 	if (!patient) {
 		res.status(404).json({ Error: 'Cannot find a Patient with the id ' + req.params.id });
 	} else {
-		const newEntry = toNewEntry(req.body);
-		patient.entries = patient.entries.concat({ ...newEntry, id: uuid() });
-		res.json(patient);
+		const newEntry = { ...toNewEntry(req.body), id: uuid() };
+		patient.entries = [newEntry].concat(patient.entries);
+		res.json(newEntry);
 	}
 });
 
