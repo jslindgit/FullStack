@@ -7,6 +7,6 @@ Content-Type: application/json
 	"date": "2023-03-06",
 	"specialist": "Dr. Teppo Testaaja",
 	"diagnosisCodes": [ "Z57.1", "M51.2" ],
-	"employerName": "huoh",
+	"employerName": "huoh", 
 	"sickLeave": { "startDate": "2023-03-05", "endDate": "2025-12-12" }
 }

@@ -3,10 +3,14 @@ import patientService from '../services/patients';
 import { Entry, Patient } from "../types";
 
 interface Props {
-	patient: Patient
+	patient: Patient,
+	setEntries: Function
 }
 
-const AddEntry = ({ patient }: Props) => {
+const AddEntry = ({ patient, setEntries }: Props) => {
+	const [error, setError] = useState('');
+
+	// Form:
 	const [description, setDescription] = useState('');
 	const [date, setDate] = useState('');
 	const [specialist, setSpecialist] = useState('');
@@ -27,8 +31,19 @@ const AddEntry = ({ patient }: Props) => {
 			healthCheckRating: Number(rating)
 		};
 
-		const returnedEntry = await patientService.addEntry(patient.id, data);
-		patient.entries = [returnedEntry as Entry].concat(patient.entries)
+		try {
+			const returnedEntry = await patientService.addEntry(patient.id, data);
+			setEntries([returnedEntry as Entry].concat(patient.entries));
+			setError('');
+			clearForm();
+		} catch (error: unknown) {
+			if (error instanceof Error) {
+				if ('response' in error && typeof error.response === 'object' && error.response && 'data' in error.response 
+				&& typeof error.response.data === 'object' && error.response.data && 'Error' in error.response.data && typeof error.response.data.Error === 'string') {
+					setError(error.response.data.Error);
+				}
+			}
+		}
 	}
 
 	const clearForm = () => {
@@ -40,7 +55,7 @@ const AddEntry = ({ patient }: Props) => {
 	}
 
 	const styleLabel = { fontSize: '16px', color: 'gray' };
-	const styleInput = { fontSize: '20px', border: '0px', borderBottom: '1px solid gray', width: '100%' };
+	const styleInput = { fontSize: '20px', border: '0px', borderBottom: '1px solid gray', width: '100%', padding: '10px' };
 	const styleButton = { fontSize: '18px', padding: '10px' };
 
 	const input = (type: string, label: string, value: string, setter: Function): JSX.Element => {
@@ -55,8 +70,13 @@ const AddEntry = ({ patient }: Props) => {
 		);
 	}
 
+	const showError = () => {
+		return error.length > 0 ? <p style={{ background: '#fdece9', color: '#b40000', fontSize: '24px', padding: '15px' }}><b>{error}</b></p> : <></>
+	}
+
 	return (
 		<div>
+			{showError()}
 			<form onSubmit={submit} style={{ border: '2px dotted black', padding: '10px' }}>
 				<h3>New HealthCheck entry</h3>
 				{input('text', 'Description', description, setDescription)}
