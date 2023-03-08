@@ -24,7 +24,8 @@
         "no-case-declarations": "off",
         "indent": [
             "error",
-            "tab"
+            "tab",
+			{ "SwitchCase": 1}
         ]
     },
     "parser": "@typescript-eslint/parser",

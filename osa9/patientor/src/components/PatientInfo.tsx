@@ -16,19 +16,19 @@ const PatientInfo = ({ diagnoses }: Props): JSX.Element => {
 
 	const id: string = useParams().id as string;
 
-	useEffect(() => {		
+	useEffect(() => {
 		const patientPromise: Promise<Patient> = patients.getById(id);
 		patientPromise.then((pat: Patient) => {
 			setPatient(pat);
 		});
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
 		if (patient) {
 			setEntries(patient.entries);
 		}
-	}, [patient]);	
+	}, [patient]);
 
 	const drawGender = (gender: string) => {
 		if (gender.toLowerCase() === 'male') {
@@ -47,9 +47,11 @@ const PatientInfo = ({ diagnoses }: Props): JSX.Element => {
 			<div>
 				<h1>{patient.name}{' '}{drawGender(patient.gender)}</h1>
 				<b>SSN:</b> {patient.ssn}
-				<AddEntry patient={patient} setEntries={setEntries} />
 				<br />
 				<b>Occupation:</b> {patient.occupation}
+				<br />
+				<br />
+				<AddEntry patient={patient} entries={entries} setEntries={setEntries} />
 				<h2>Entries:</h2>
 				{entries.map((entry: Entry) => (
 					<EntryInfo key={entry.id} entry={entry} diagnoses={diagnoses} />

@@ -1,5 +1,6 @@
 import { Entry, Diagnosis, HealthCheckRating } from "../types";
 import { assertNever } from "../utils";
+import { colorHealthCheck, colorOccupational, colorHospital } from "../constants";
 
 interface Props {
 	entry: Entry;
@@ -9,7 +10,7 @@ interface Props {
 const EntryInfo = ({ entry, diagnoses }: Props) => {
 	const diagnosisInfo = (diagnosisCode: string) => {
 		const diagnosis = diagnoses.find(d => d.code === diagnosisCode);
-		return <li key={diagnosisCode}>{diagnosisCode}{' '}{diagnosis ? diagnosis.name : 'Uknown diagnosis code'}</li>
+		return <li key={diagnosisCode}>{diagnosisCode}{' ('}{diagnosis ? diagnosis.name : 'Unknown diagnosis code'}{')'}</li>
 	}
 
 	const style = (bgColor: string) => {
@@ -21,7 +22,7 @@ const EntryInfo = ({ entry, diagnoses }: Props) => {
 	switch (entry.type) {
 		case "HealthCheck":
 			return (
-				<div style={style("lightgreen")}>
+				<div style={style(colorHealthCheck)}>
 					<h3>{entry.date}{' - Health check'}</h3>
 					<i>{entry.description}</i>
 					<ul>
@@ -35,7 +36,7 @@ const EntryInfo = ({ entry, diagnoses }: Props) => {
 			);
 		case "OccupationalHealthcare":
 			return (
-				<div style={style("lightblue")}>
+				<div style={style(colorOccupational)}>
 					<h3>{entry.date}{' - Occupational health care'}{' ('}{entry.employerName}{')'}</h3>
 					<i>{entry.description}</i>
 					<ul>
@@ -49,7 +50,7 @@ const EntryInfo = ({ entry, diagnoses }: Props) => {
 			);
 		case "Hospital":
 			return (
-				<div style={style("yellow")}>
+				<div style={style(colorHospital)}>
 					<h3>{entry.date}{' - Hospital'}</h3>
 					<i>{entry.description}</i>
 					<ul>
