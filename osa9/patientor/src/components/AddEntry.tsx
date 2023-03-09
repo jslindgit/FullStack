@@ -1,15 +1,15 @@
 import { useState } from "react";
 import patientService from '../services/patients';
-import { Entry, Patient, sickLeaveDates, dischargeDate } from "../types";
-import { colorHealthCheck, colorOccupational, colorHospital } from "../constants";
+import { Entry, Diagnosis, Patient, sickLeaveDates, dischargeDate, HealthCheckRating } from "../types";
 
 interface Props {
 	patient: Patient,
 	entries: Entry[],
-	setEntries: Function
+	setEntries: Function,
+	diagnoses: Diagnosis[]
 }
 
-const AddEntry = ({ patient, entries, setEntries }: Props) => {
+const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 	const [error, setError] = useState('');
 	const [type, setType] = useState('HealthCheck');
 
@@ -17,8 +17,8 @@ const AddEntry = ({ patient, entries, setEntries }: Props) => {
 	const [description, setDescription] = useState('');
 	const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
 	const [specialist, setSpecialist] = useState('');
-	const [codes, setCodes] = useState('');
-	const [rating, setRating] = useState('');
+	const [codes, setCodes] = useState<Array<string>>([]);
+	const [rating, setRating] = useState(0);
 	const [employer, setEmployer] = useState('');
 	const [sickLeaveStart, setSickLeaveStart] = useState(new Date().toISOString().slice(0, 10));
 	const [sickLeaveEnd, setSickLeaveEnd] = useState(new Date(new Date().getTime() + 86400000).toISOString().slice(0, 10));
@@ -79,11 +79,12 @@ const AddEntry = ({ patient, entries, setEntries }: Props) => {
 	}
 
 	const clearForm = () => {
+		console.log()
 		setDescription('');
 		setDate(new Date().toISOString().slice(0, 10));
 		setSpecialist('');
 		setCodes('');
-		setRating('');
+		setRating(0);
 		setEmployer('');
 		setSickLeaveStart(new Date().toISOString().slice(0, 10));
 		setSickLeaveEnd(new Date(new Date().getTime() + 86400000).toISOString().slice(0, 10));
@@ -92,16 +93,16 @@ const AddEntry = ({ patient, entries, setEntries }: Props) => {
 	}
 
 	const styleLabel = { fontSize: '16px', color: 'gray' };
-	const styleInput = { fontSize: '20px', border: '0px', borderBottom: '2px solid #9c9c9c', width: '98%', padding: '10px' };
+	const styleInput = { border: '0px', borderBottom: '2px solid #9c9c9c', width: '98%' };
 
-	const formColor = () => {
+	const formCssStyle = (): string => {
 		switch (type) {
 			case 'HealthCheck':
-				return colorHealthCheck;
+				return 'healthCheck';
 			case 'OccupationalHealthcare':
-				return colorOccupational;
+				return 'occupational';
 			case 'Hospital':
-				return colorHospital;
+				return 'hospital';
 			default:
 				throw new Error('Unhandled Entry type: ' + type);
 		}
@@ -112,18 +113,52 @@ const AddEntry = ({ patient, entries, setEntries }: Props) => {
 			<div key={label}>
 				<span style={styleLabel}>{label}</span>
 				<br />
-				<input style={{ ...styleInput, background: formColor() }} type={type} value={value} onChange={(event) => setter(event.target.value)} />
+				<input className={formCssStyle()} style={styleInput} type={type} value={value} onChange={(event) => setter(event.target.value)} />
 				<br />
 				<br />
 			</div>
 		);
 	}
 
+	const setHealthcheckRating = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		setRating(Number(event.target.value));
+	}
+
+	const
+
+	const healthCheckRatingOptions = (): JSX.Element => {
+		return (
+			<>
+				{Object.keys(HealthCheckRating).filter(h => !isNaN(Number(h))).map(h => (
+					<option key={h} value={h}>{h} - {HealthCheckRating[Number(h)]}</option>
+				))}
+			</>
+		);
+	}
+
+	const diagnoseOptions = (): JSX.Element => {
+		return (
+			<>
+				{diagnoses.map(d => (
+					<option key={d.code} value={d.code}>{d.code} ({d.name})</option>
+				))}
+			</>
+		)
+	}
+
 	const typeSpecificFields = (): JSX.Element[] => {
 		switch (type) {
 			case 'HealthCheck':
 				return ([
-					input('number', 'Healthcheck rating', rating, setRating)
+					<div key="addEntryHealthCheck">
+						<span style={styleLabel}>Healthcheck rating</span>
+						<br />
+						<select onChange={setHealthcheckRating}>
+							{healthCheckRatingOptions()}
+						</select>
+						<hr style={{ color: "#9c9c9c" }}></hr>
+						<br />
+					</div>
 				]);
 			case 'OccupationalHealthcare':
 				return ([
@@ -148,15 +183,20 @@ const AddEntry = ({ patient, entries, setEntries }: Props) => {
 			<button onClick={() => setType('Hospital')}>Hospital</button>
 			<br /><br />
 			{showError()}
-			<form onSubmit={submit} style={{ border: '2px dotted black', padding: '15px', background: formColor() }}>
+			<form onSubmit={submit} className={formCssStyle()} style={{ border: '2px dotted black', borderRadius: '10px', padding: '15px' }}>
 				<h3>New {type} entry</h3>
 				{input('text', 'Description', description, setDescription)}
 				{input('date', 'Date', date, setDate)}
 				{input('text', 'Specialist', specialist, setSpecialist)}
 				{typeSpecificFields()}
-				{input('text', 'Diagnosis codes', codes, setCodes)}
+				<span style={styleLabel}>Diagnosis codes (hold CTRL to select multiple)</span>
+				<br />
+				<select id="diagnosisSelect" size={diagnoses.length} multiple>
+					{diagnoseOptions()}
+				</select>
+				<br /><br /><br />
 				<button type="reset" className="red" onClick={clearForm}>CANCEL</button>
-				<button type='submit' className="green">ADD</button>
+				<button type='submit' className="green">ADD ENTRY</button>
 			</form>
 		</div>
 	)

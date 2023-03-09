@@ -44,3 +44,42 @@ button.red:hover {
 button.red:active {
 	background-color: #ff3b3b!important;
 }
+
+input {
+	font-size: 20px;
+	padding: 10px;
+}
+
+select {
+	font-size: 20px;
+	padding: 5px;	
+	margin-top: 10px;
+}
+
+option {
+	text-transform: capitalize;
+	font-size: 18px;
+}
+
+.entry {
+	border-width: 2px;
+	border-style: solid;
+	border-color: black;
+	border-radius: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+	font-size: 18px;
+	margin-bottom: 10px;	
+}
+
+.healthCheck {
+	background-color: #feffd8!important;
+}
+.occupational {
+	background-color: #deedff!important;
+}
+.hospital {
+	background-color: #e3ffe4!important;
+}

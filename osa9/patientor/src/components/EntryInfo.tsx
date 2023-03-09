@@ -1,6 +1,5 @@
 import { Entry, Diagnosis, HealthCheckRating } from "../types";
 import { assertNever } from "../utils";
-import { colorHealthCheck, colorOccupational, colorHospital } from "../constants";
 
 interface Props {
 	entry: Entry;
@@ -13,16 +12,10 @@ const EntryInfo = ({ entry, diagnoses }: Props) => {
 		return <li key={diagnosisCode}>{diagnosisCode}{' ('}{diagnosis ? diagnosis.name : 'Unknown diagnosis code'}{')'}</li>
 	}
 
-	const style = (bgColor: string) => {
-		return {
-			backgroundColor: bgColor, border: "2px solid black", paddingLeft: "10px", marginBottom: "10px", fontSize: "18px"
-		};
-	}
-
 	switch (entry.type) {
 		case "HealthCheck":
 			return (
-				<div style={style(colorHealthCheck)}>
+				<div className="entry healthCheck">
 					<h3>{entry.date}{' - Health check'}</h3>
 					<i>{entry.description}</i>
 					<ul>
@@ -36,7 +29,7 @@ const EntryInfo = ({ entry, diagnoses }: Props) => {
 			);
 		case "OccupationalHealthcare":
 			return (
-				<div style={style(colorOccupational)}>
+				<div className="entry occupational">
 					<h3>{entry.date}{' - Occupational health care'}{' ('}{entry.employerName}{')'}</h3>
 					<i>{entry.description}</i>
 					<ul>
@@ -50,7 +43,7 @@ const EntryInfo = ({ entry, diagnoses }: Props) => {
 			);
 		case "Hospital":
 			return (
-				<div style={style(colorHospital)}>
+				<div className="entry hospital">
 					<h3>{entry.date}{' - Hospital'}</h3>
 					<i>{entry.description}</i>
 					<ul>

@@ -51,7 +51,7 @@ const PatientInfo = ({ diagnoses }: Props): JSX.Element => {
 				<b>Occupation:</b> {patient.occupation}
 				<br />
 				<br />
-				<AddEntry patient={patient} entries={entries} setEntries={setEntries} />
+				<AddEntry patient={patient} entries={entries} setEntries={setEntries} diagnoses={diagnoses} />
 				<h2>Entries:</h2>
 				{entries.map((entry: Entry) => (
 					<EntryInfo key={entry.id} entry={entry} diagnoses={diagnoses} />
@@ -60,7 +60,7 @@ const PatientInfo = ({ diagnoses }: Props): JSX.Element => {
 		);
 	}
 	else {
-		return <div>loading...</div>
+		return <p>Loading...</p>
 	}
 }
 
