@@ -32,15 +32,13 @@ const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 	const submit = async (event: React.SyntheticEvent) => {
 		event.preventDefault();
 
-		const diagnosisCodes: string[] = codes.trim().length > 0 ? codes.trim().split(',').map(c => c.trim()) : [];
-
 		let data = {};
 		const baseData = {
 			type: type,
 			description: description,
 			date: date,
 			specialist: specialist,
-			diagnosisCodes: diagnosisCodes
+			diagnosisCodes: codes
 		};
 
 		switch (type) {
@@ -83,7 +81,7 @@ const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 		setDescription('');
 		setDate(new Date().toISOString().slice(0, 10));
 		setSpecialist('');
-		setCodes('');
+		setCodes([]);
 		setRating(0);
 		setEmployer('');
 		setSickLeaveStart(new Date().toISOString().slice(0, 10));
@@ -124,7 +122,13 @@ const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 		setRating(Number(event.target.value));
 	}
 
-	const
+	const setDiagnoseCodes = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		const selected = event.target.selectedOptions;
+		if (selected.length > 0) {
+			const values = Array.from(selected).map(option => option.value);
+			setCodes(values);
+		}
+	}
 
 	const healthCheckRatingOptions = (): JSX.Element => {
 		return (
@@ -153,7 +157,7 @@ const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 					<div key="addEntryHealthCheck">
 						<span style={styleLabel}>Healthcheck rating</span>
 						<br />
-						<select onChange={setHealthcheckRating}>
+						<select value={rating} onChange={setHealthcheckRating}>
 							{healthCheckRatingOptions()}
 						</select>
 						<hr style={{ color: "#9c9c9c" }}></hr>
@@ -178,12 +182,11 @@ const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 
 	return (
 		<div>
-			<button onClick={() => setType('HealthCheck')}>Health Check</button>
-			<button onClick={() => setType('OccupationalHealthcare')}>Occupational Healthcare</button>
-			<button onClick={() => setType('Hospital')}>Hospital</button>
-			<br /><br />
 			{showError()}
 			<form onSubmit={submit} className={formCssStyle()} style={{ border: '2px dotted black', borderRadius: '10px', padding: '15px' }}>
+				<button type='button' style={type === 'HealthCheck' ? { background: 'green' } : {}} onClick={() => setType('HealthCheck')}>Health Check</button>
+				<button type='button' style={type === 'OccupationalHealthcare' ? { background: 'green' } : {}} onClick={() => setType('OccupationalHealthcare')}>Occupational Healthcare</button>
+				<button type='button' style={type === 'Hospital' ? { background: 'green' } : {}} onClick={() => setType('Hospital')}>Hospital</button>
 				<h3>New {type} entry</h3>
 				{input('text', 'Description', description, setDescription)}
 				{input('date', 'Date', date, setDate)}
@@ -191,7 +194,7 @@ const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 				{typeSpecificFields()}
 				<span style={styleLabel}>Diagnosis codes (hold CTRL to select multiple)</span>
 				<br />
-				<select id="diagnosisSelect" size={diagnoses.length} multiple>
+				<select value={codes} onChange={setDiagnoseCodes} id="diagnosisSelect" size={diagnoses.length} multiple>
 					{diagnoseOptions()}
 				</select>
 				<br /><br /><br />
