@@ -34,8 +34,6 @@ const addEntry = async (patientId: string, entry: object) => {
 		entry
 	);
 
-	console.log('patients.addEntry data:', data);
-
 	return data;
 }
 
