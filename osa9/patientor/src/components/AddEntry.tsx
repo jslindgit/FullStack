@@ -20,8 +20,8 @@ const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 	const [codes, setCodes] = useState<Array<string>>([]);
 	const [rating, setRating] = useState(0);
 	const [employer, setEmployer] = useState('');
-	const [sickLeaveStart, setSickLeaveStart] = useState(new Date().toISOString().slice(0, 10));
-	const [sickLeaveEnd, setSickLeaveEnd] = useState(new Date(new Date().getTime() + 86400000).toISOString().slice(0, 10));
+	const [sickLeaveStart, setSickLeaveStart] = useState('');
+	const [sickLeaveEnd, setSickLeaveEnd] = useState('');
 	const [dischargeDate, setDischargeDate] = useState(new Date().toISOString().slice(0, 10));
 	const [dischargeCriteria, setDischargeCriteria] = useState('');
 
@@ -84,8 +84,8 @@ const AddEntry = ({ patient, entries, setEntries, diagnoses }: Props) => {
 		setCodes([]);
 		setRating(0);
 		setEmployer('');
-		setSickLeaveStart(new Date().toISOString().slice(0, 10));
-		setSickLeaveEnd(new Date(new Date().getTime() + 86400000).toISOString().slice(0, 10));
+		setSickLeaveStart('');
+		setSickLeaveEnd('');
 		setDischargeDate(new Date().toISOString().slice(0, 10));
 		setDischargeCriteria('');
 	}
